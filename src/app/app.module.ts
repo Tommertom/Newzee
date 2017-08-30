@@ -31,6 +31,8 @@ import { Debug } from './../providers/debug';
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 
+import { HTTP } from '@ionic-native/http';
+
 @Injectable()
 export class Ionic2ErrorHandler extends IonicErrorHandler implements ErrorHandler {
   constructor(private events: Events) {
@@ -80,6 +82,7 @@ export class Ionic2ErrorHandler extends IonicErrorHandler implements ErrorHandle
     StatusBar,
     SplashScreen,
     Db, Debug,
+    HTTP,
   //  Http,
     //HTTP,
     //FeedCollectionService,

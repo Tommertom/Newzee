@@ -28,7 +28,18 @@
     "itemfilter": "standard",
     "defaultthumb": "assets/img/newzee.png"
   },
- 
+  {
+    "feedlabel": "CoinTelegraph",
+    "prettylabel": "Coin Telegraph",
+    "feedurl": " https://cointelegraph.com/rss",
+    "tags": "tech",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
+
+
 
  {
     "feedlabel": "Lifehacker",

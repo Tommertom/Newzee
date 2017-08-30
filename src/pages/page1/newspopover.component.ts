@@ -110,14 +110,15 @@ export class NewsPopoverPage {
   }
 
   ionViewDidLoad() {
-    // let's estimate if the image is too white
-    let colorThief = new ColorThief();
-    let color = colorThief.getPalette(this.myElement.nativeElement, 5);
+    // let's estimate if the image is too white - BLANKED OUT NOG EEN KEER CHECKEN
+  //  let colorThief = new ColorThief();
+ //   let color = colorThief.getPalette(this.myElement.nativeElement, 5);
     //  this.debugData = JSON.stringify(color, null, 2);
     //console.log('DEBUG get colors p', this.myElement, this.debugData);
-    color.map(color => {
-      if (color[0] + color[1] + color[2] > 3 * 200) this.shareColor = 'black';
-    });
+  //  color.map(color => {
+    //  if (color[0] + color[1] + color[2] > 3 * 200) this.shareColor = 'black';
+  //  });
+//
 
     /* not working
         console.log('DEBUG color  2', color);

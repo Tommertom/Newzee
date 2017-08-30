@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import * as XML from 'pixl-xml';
-//import { HTTP } from '@ionic-native/http';
+import { HTTP } from '@ionic-native/http';
 
 import { Events } from 'ionic-angular';
 
@@ -43,7 +43,7 @@ coindesk.com
 bankinnovation.net
 
 http://www.theeastafrican.co.ke/news/2558-2558-view-asFeed-kht4fy/index.xml
-
+ 
 */
 
 const responsefilterfunctions = {
@@ -215,8 +215,8 @@ export class NewsAggregatorService {
     private activeFeedCollection = [];
 
     constructor(
-        private http: Http,// HTTP,//Http, // HTTP, //Http,
-    //    private debug: Debug,
+        private http: HTTP, // Http,// HTTP,//Http, // HTTP, //Http,
+        //    private debug: Debug,
         private events: Events
     ) {
     };
@@ -252,8 +252,8 @@ export class NewsAggregatorService {
         // lets go through all the active feeds and create and observable for it
         let feedsArray = [];
         this.activeFeedCollection.map(ft => {
-            //  let item = Observable.from(this.http.get(ft['feedurl'], {}, {}))
-            let item = this.http.get(ft['feedurl'])
+            let item = Observable.from(this.http.get(ft['feedurl'], {}, {}))
+                //let item = this.http.get(ft['feedurl'])
                 .catch((error: any) => {
                     this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': error.toString() + ' ' + ft['feedurl'], 'error': true });
                     this.counter += 1;
