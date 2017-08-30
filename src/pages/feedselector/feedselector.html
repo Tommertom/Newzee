@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title style="font-family: 'Courier'" (click)="openAbout()">
+      .Newzee 
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <span color="primary" showWhen="ios">Cancel</span>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button (click)="addFeeds()">
+        <span color="primary" >Save</span>
+     </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <ion-fab right bottom>
+    <button icon-only color="white" ion-fab (click)="openActionSheet()"> 
+         <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+  <button style="height:30px" ion-button full round color="secondary" (click)="toggleAllTags(true)">
+    Select all tags
+  </button>
+  <button style="height:30px" ion-button full round color="secondary" (click)="toggleAllTags(false)">
+    Unselect all tags
+  </button>
+  <span *ngFor="let tag of tags">
+  <ion-chip *ngIf="tagSelection[tag]" color="primary" (click)="toggleTag(tag)">
+    <ion-label>{{tag}}</ion-label>
+  </ion-chip>
+  <ion-chip *ngIf="!tagSelection[tag]"  (click)="toggleTag(tag)">
+    <ion-label>{{tag}}</ion-label>
+  </ion-chip>
+ </span>
+  <ion-list>
+    <span *ngFor="let item of itemlist">
+    <ion-item *ngIf="(itemSelector == selectedFeeds[item.feedlabel]) || showAll">
+      <ion-label>{{item.prettylabel}}</ion-label>
+      <ion-checkbox [(ngModel)]="selectedFeeds[item.feedlabel]"></ion-checkbox>
+    </ion-item>
+    </span>
+  </ion-list>
+  <button *ngIf="itemlist.length>0" style="height:30px" ion-button full round color="secondary" (click)="toggleTagAll(true)">
+    Select all feeds
+  </button>
+  <button *ngIf="itemlist.length>0" style="height:30px" ion-button full round color="secondary" (click)="toggleTagAll(false)">
+    Unselect all feeds
+  </button>
+</ion-content>

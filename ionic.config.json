@@ -2,5 +2,7 @@
   "name": "newzee",
   "app_id": "2b25095e",
   "type": "ionic-angular",
-  "integrations": {}
+  "integrations": {
+    "cordova": {}
+  }
 }

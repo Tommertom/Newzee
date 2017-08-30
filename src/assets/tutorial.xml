@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss>
+<channel>
+	<title>Newzee Tutorial</title>
+	<link>www.github.com</link>
+	<description>NewZee</description>
+	<item>
+		<title>1. Welcome to Newzee</title>
+		<link>http://github.com/Tommertom/newzee</link>
+		<pubDate>NA</pubDate>
+		<description>
+		Great stuff, this newsreader. It allows you to quickly go through a number of sources
+		and it will keep track of what you have seen or not. You can add custom feeds from 
+		Twitter, Instagram, RSS feeds and Pinterest!		
+		</description>
+	</item>
+    <item>
+		<title>2. Tap me!</title>
+		<link>http://github.com/Tommertom/newzee</link>
+		<pubDate>NA</pubDate>
+		<description>
+		By tapping on an item, you will see any message that is provided by the feed.
+		You can then like the item, to save it, open the deeplink or read further.
+		There is a social sharing option: right upper corner, tap the arrow to share
+		this newsitem with friends and family.Finished reading the popup? Just tap anywhere.
+		</description>
+	</item>
+	 <item>
+		<title>3. Slide me to the right!</title>
+		<link>http://github.com/Tommertom/newzee</link>
+		<pubDate>NA</pubDate>
+		<description>
+		By sliding to the left, you can do actions on this specific newsitem. You can
+		delete the item, mark it as favorite, or share it.
+		</description>
+	</item>
+	 <item>
+		<title>4. Slide me to the left!</title>
+		<link>http://github.com/Tommertom/newzee</link>
+		<pubDate>NA</pubDate>
+		<description>
+		Sliding the left gives you options on the specific feed related to the item: delete all
+		items from the feed and remove the feed from the settings. This feature allows you
+		to quickly scan new feeds for relevance, and remove them when needed.
+		</description>
+	</item>
+	 <item>
+		<title>5. Hold and press this item</title>
+		<link>http://github.com/Tommertom/newzee</link>
+		<pubDate>NA</pubDate>
+		<description>
+		Doing a "long press" directly moves you to the link provided by the newsitem.
+		</description>
+	</item>
+	 <item>
+		<title>6. Doing a manual refresh</title>
+		<link>http://github.com/Tommertom/newzee</link>
+		<pubDate>NA</pubDate>
+		<description>
+		You can do a manual refresh by pulling the screen down (from the top item onwards).
+		</description>
+	</item>
+	<item>
+		<title>7. What are these things on the bottom of the screen???</title>
+		<link>http://github.com/Tommertom/newzee</link>
+		<pubDate>NA</pubDate>
+		<description>
+		To the bottom of the screen, you can find three icons: scroll page up, delete all items (except for the 
+		ones marked as favorite) and scroll page up. 
+		When there are no items available, these icons are no longer available. A feed settings option is 
+		made available.
+		</description>
+	</item>
+		<item>
+		<title>8. Before you continue... click me</title>
+		<link>http://github.com/Tommertom/newzee</link>
+		<pubDate>NA</pubDate>
+		<description>
+		Before you continue, make sure you delete this feed from your settings (remember: slide left, delete feed), 
+		otherwise, you will see this tutorial pop-up every four days or so. Secondly, don't forget to send the 
+		author a message with feedback on the app, or any other feature you would like to add.
+		In case you want to support this project financially, please let the author know! 
+		He can be reached through tom.gruintjes(a)gmail.com.
+		</description>
+	</item>
+</channel>
+</rss>

@@ -1,0 +1,24 @@
+ <ion-header>
+  <ion-toolbar>
+    <ion-title (click)="openAbout()">
+      Hall of Fame
+    </ion-title>
+     <ion-buttons end>
+      <button ion-button (click)="close()">
+        <span color="primary" >Close</span>
+     </button>
+    </ion-buttons>
+  </ion-toolbar>
+  </ion-header>
+  <ion-content>
+  <ion-list>
+  <ion-item *ngIf="hallOfFameList.length==0">No Item</ion-item>
+    <ion-item *ngFor="let hashcode of hallOfFameList" text-wrap style="padding:0px" (press)="pressEvent(hallOfFame[hashcode],$event)" (click)="clickEvent(hallOfFame[hashcode],$event)">
+        <ion-thumbnail item-left style="margin-top:0px;margin-bottom:0px">
+          <ion-img [src]="hallOfFame[hashcode].thumbnail"></ion-img>
+        </ion-thumbnail>
+        <b style="font-size:85%" [innerHTML]="hallOfFame[hashcode].title"></b>
+        <span style="color: gray;font-size:70%;position:absolute; bottom:0;right:0px;">{{hallOfFame[hashcode].prettylabel}}</span>
+  </ion-item> 
+  </ion-list>
+  </ion-content>
