@@ -27,7 +27,7 @@ export class AboutPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private alertCtrl: AlertController,
-    private modalCtrl: ModalController,
+ //   private modalCtrl: ModalController,
     private popoverCtrl: PopoverController,
     private debug: Debug,
     public viewCtrl: ViewController) {

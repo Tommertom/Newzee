@@ -11,7 +11,7 @@ import { ViewChild, ElementRef } from '@angular/core';
 
 // for the cordova plugin check if we are running ionic serve
 declare var window;
-declare var ColorThief: any;
+//declare var ColorThief: any;
 
 @Component({
   template: `

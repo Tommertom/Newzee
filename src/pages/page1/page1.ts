@@ -16,8 +16,8 @@ hall of fame: volgorde tijd als ook sliders
 */ 
 
 import {
-  FabContainer, Content, NavController,
-  ModalController, PopoverController, LoadingController,
+  FabContainer, Content, //NavController,
+  ModalController, PopoverController, //LoadingController,
   Events, Keyboard, ToastController
 } from 'ionic-angular';
 
@@ -27,7 +27,7 @@ import { FeedselectorPage } from './../feedselector/feedselector';
 import { NewsAggregatorService } from './../../providers/newsaggregator.services';
 import 'rxjs/Rx'; // unsure why this is needed (HTTP needs it???)
 
-import { Storage } from '@ionic/storage';
+//import { Storage } from '@ionic/storage';
 
 declare var window; // for the social share plugin testing
 
@@ -103,10 +103,10 @@ export class Page1 {
   @ViewChild(Content) content: Content;
 
   constructor(
-    private navCtrl: NavController,
+   // private navCtrl: NavController,
     private modalCtrl: ModalController,
     private popoverCtrl: PopoverController,
-    private loadingCtrl: LoadingController,
+   // private loadingCtrl: LoadingController,
     private newsservice: NewsAggregatorService,
     public keyboard: Keyboard,
     private toastCtrl: ToastController,
@@ -115,7 +115,7 @@ export class Page1 {
     //private debug: Debug,
     private http: Http,
     private platform: Platform,
-    private storage: Storage,
+   // private storage: Storage,
     private iab:InAppBrowser,
     private socialSharing: SocialSharing
   ) {

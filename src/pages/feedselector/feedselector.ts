@@ -1,4 +1,4 @@
-import { Debug } from './../../providers/debug';
+//import { Debug } from './../../providers/debug';
 import { Component } from '@angular/core';
 import {
   ModalController,
@@ -34,7 +34,7 @@ export class FeedselectorPage {
     public alertCtrl: AlertController,
     public navCtrl: NavController,
     public navParams: NavParams,
-    private debug: Debug,
+  //  private debug: Debug,
     private modalCtrl: ModalController,
     private actionsheetCtrl: ActionSheetController,
     private viewCtrl: ViewController) { }
