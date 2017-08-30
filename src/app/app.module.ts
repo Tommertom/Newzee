@@ -31,7 +31,7 @@ import { Debug } from './../providers/debug';
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 
-import { HTTP } from '@ionic-native/http';
+//import { HTTP } from '@ionic-native/http';
 
 @Injectable()
 export class Ionic2ErrorHandler extends IonicErrorHandler implements ErrorHandler {
@@ -65,7 +65,7 @@ export class Ionic2ErrorHandler extends IonicErrorHandler implements ErrorHandle
     BrowserModule,HttpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot({
-      name: 'newzeedb2',
+      name: 'newzeedb3',
       driverOrder: ['sqlite', 'indexeddb', 'websql'] //
     })
   ],
@@ -82,7 +82,7 @@ export class Ionic2ErrorHandler extends IonicErrorHandler implements ErrorHandle
     StatusBar,
     SplashScreen,
     Db, Debug,
-    HTTP,
+   // HTTP,
   //  Http,
     //HTTP,
     //FeedCollectionService,
