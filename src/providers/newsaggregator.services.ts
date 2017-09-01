@@ -273,7 +273,7 @@ export class NewsAggregatorService {
                     return itemlist;
                 })
                 .do(() => {
-                    console.log('SSSTTT', this.counter, this.totalcount - 1)
+                 //   console.log('SSSTTT', this.counter, this.totalcount - 1)
                     this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': '..' });
                     this.counter += 1;
                 })

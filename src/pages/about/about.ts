@@ -1,7 +1,7 @@
 import { Debug } from './../../providers/debug';
 import { Component } from '@angular/core';
 
-import { NavController, NavParams, ViewController, ModalController, AlertController, PopoverController } from 'ionic-angular';
+import { NavController, NavParams, ViewController,  AlertController, PopoverController } from 'ionic-angular';
 
 import { NewsPopoverPage } from './../page1/newspopover.component';
 

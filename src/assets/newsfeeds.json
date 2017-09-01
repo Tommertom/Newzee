@@ -31,7 +31,7 @@
   {
     "feedlabel": "CoinTelegraph",
     "prettylabel": "Coin Telegraph",
-    "feedurl": " https://cointelegraph.com/rss",
+    "feedurl": "https://cointelegraph.com/rss",
     "tags": "tech",
     "clearWords": [],
     "responsefilter": "standard",
@@ -40,6 +40,29 @@
   },
 
 
+  {
+    "feedlabel": "ElPaisTech",
+    "prettylabel": "El Pais Tech",
+    "feedurl": "http://ep00.epimg.net/rss/tecnologia/portada.xml",
+    "tags": "tech",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
+
+
+
+  {
+    "feedlabel": "Finnovista",
+    "prettylabel": "Finnovista",
+    "feedurl": "http://www.finnovista.com/feed/",
+    "tags": "tech",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
 
  {
     "feedlabel": "Lifehacker",

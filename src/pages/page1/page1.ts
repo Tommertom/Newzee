@@ -13,7 +13,7 @@ import { Component, ViewChild } from '@angular/core';
 /*
 todo:
 hall of fame: volgorde tijd als ook sliders 
-*/ 
+*/
 
 import {
   FabContainer, Content, //NavController,
@@ -64,6 +64,7 @@ export class Page1 {
   newsData: Object = {}; // the loaded newsitems, full data out of the http
   // newsIndex: Array<string> = []; // used to fill the view
   newsCache: Array<string> = []; // all items (hashcode array) for the view
+  newsBuffer: Array<string> = []; // all items buffered after the limit is reached
   seenItems: Array<string> = []; // the ones seen
   itemCount: number = 0;
   hallOfFame: Object = {}; // archived stuff
@@ -81,7 +82,7 @@ export class Page1 {
   // overall app settings  
   appSettings: Object = {
     'maxAge': 2,
-    'maxItemsInView': 200,
+    'maxItemsInView': 300,
     'refreshTime': 500,
     'pageScrollTime': 0,
     'bubbleDelay': 900,
@@ -103,10 +104,10 @@ export class Page1 {
   @ViewChild(Content) content: Content;
 
   constructor(
-   // private navCtrl: NavController,
+    // private navCtrl: NavController,
     private modalCtrl: ModalController,
     private popoverCtrl: PopoverController,
-   // private loadingCtrl: LoadingController,
+    // private loadingCtrl: LoadingController,
     private newsservice: NewsAggregatorService,
     public keyboard: Keyboard,
     private toastCtrl: ToastController,
@@ -115,8 +116,8 @@ export class Page1 {
     //private debug: Debug,
     private http: Http,
     private platform: Platform,
-   // private storage: Storage,
-    private iab:InAppBrowser,
+    // private storage: Storage,
+    private iab: InAppBrowser,
     private socialSharing: SocialSharing
   ) {
 
@@ -268,9 +269,26 @@ export class Page1 {
       if (!this.newsData[hashcode]['favorite']) {
         this.newsData[hashcode]['seen'] = true;
         this.deleteNewsItem(hashcode);
-
       }
     }
+
+    // check the buffer and add to the view what is possible
+    if (this.newsBuffer.length > 0) {
+      this.appSettings['maxItemsInView']
+
+      let cachelength = this.newsCache.length;
+      this.debuglog('START stuff ' + this.newsCache.length + ' ' + this.newsBuffer.length + ' ' + cachelength);
+      this.newsCache = this.newsCache
+        .concat(
+        this.newsBuffer
+          .slice(0, this.appSettings['maxItemsInView'] - cachelength)
+        );
+
+      this.newsBuffer = this.newsBuffer.slice(cachelength);
+
+      this.debuglog('END stuff ' + this.newsCache.length + ' ' + this.newsBuffer.length + ' ' + cachelength);
+    }
+
 
     this.saveSettingsAndData();
     this.isLoading = false;
@@ -474,15 +492,29 @@ export class Page1 {
   addNewsItem(item) {
     let hashcode = item['hashcode'];
 
+    //appSettings: Object = {
+    //  'maxAge': 2,
+    //  'maxItemsInView': 200,
+
     // we have a new item
-    if (!this.newsData[hashcode]) {
-      this.newsCache.push(hashcode);
+    if (this.newsCache.length < this.appSettings['maxItemsInView']) {
+      if (!this.newsData[hashcode]) {
+        this.newsCache.push(hashcode);
+        this.newsData[hashcode] = Object.assign(
+          {
+            favorite: false,
+            seen: false
+          }, item);
+        this.itemCount++;
+      }
+    } else {
       this.newsData[hashcode] = Object.assign(
         {
           favorite: false,
           seen: false
         }, item);
-      this.itemCount++;
+
+      this.newsBuffer.push(hashcode);
     }
   }
 
