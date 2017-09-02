@@ -37,7 +37,7 @@ import { Events } from 'ionic-angular';
 export class Ionic2ErrorHandler extends IonicErrorHandler implements ErrorHandler {
   constructor(private events: Events) {
     super();
-  }
+  } 
   /**
    * @internal
    */

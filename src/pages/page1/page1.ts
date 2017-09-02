@@ -286,6 +286,8 @@ export class Page1 {
 
       this.newsBuffer = this.newsBuffer.slice(cachelength);
 
+      this.itemCount = this.newsCache.length;
+
       this.debuglog('END stuff ' + this.newsCache.length + ' ' + this.newsBuffer.length + ' ' + cachelength);
     }
 
@@ -513,6 +515,9 @@ export class Page1 {
           favorite: false,
           seen: false
         }, item);
+
+      // sort if the max was reached
+      if (this.newsCache.length == (this.appSettings['maxItemsInView'] + 1)) this.fillView();
 
       this.newsBuffer.push(hashcode);
     }
