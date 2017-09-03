@@ -108,7 +108,6 @@ export class HomePage {
     setTimeout(() => {
       this.platform.ready().then(() => {
         this.db.initDB().then(() => {
-          console.log('itemsv1', this.appSettings['maxItemsInView']);
           this.loadSettingsAndData();
         });
       });
