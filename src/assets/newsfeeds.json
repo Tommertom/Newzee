@@ -9,6 +9,16 @@
     "defaultthumb": "assets/img/newzee.png"
   },
   {
+    "feedlabel": "Dummydata",
+    "prettylabel": "Dummy Data",
+    "feedurl": "assets/dummydata.xml",
+    "tags": "test",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/capgemini.png"
+  },
+  {
     "feedlabel": "dgMarket",
     "prettylabel": "dgMarket",
     "feedurl": "https://www.dgmarket.com/tenders/RssFeedAction.do?locationISO=_s%2c_p%2c_c%2c_l%2c_m%2c_a&keywords=&sub=66100000&noticeType=&language=&buyerId=",
@@ -427,6 +437,7 @@
     "defaultthumb": "assets/img/capgemini.png"
   },
   
+
   {
     "feedlabel": "Cap Gemini CTO blog",
     "prettylabel": "Cap Gemini CTO blog",

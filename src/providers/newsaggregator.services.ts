@@ -1,50 +1,8 @@
-//import { Debug } from './debug';
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import * as XML from 'pixl-xml';
-//import { HTTP } from '@ionic-native/http';
-
 import { Events } from 'ionic-angular';
-
 import { Observable } from "rxjs/Rx";
-
-/* 
-
-thepaypers.com  ->http://www.thepaypers.com/syndication
-http://feeds.feedburner.com/thepaypers/cfKW Headlines
-http://feeds.feedburner.com/ThePaypersOnlinePayments
-http://feeds.feedburner.com/ThePaypersMobilePayments
-http://feeds.feedburner.com/ThePaypersE-invoicing
-http://feeds.feedburner.com/ThePaypersOnlineBanking
-http://feeds.feedburner.com/ThePaypersE-commerce
-http://feeds.feedburner.com/ThePaypersE-identity
-http://feeds.feedburner.com/ThePaypersCards
-http://feeds.feedburner.com/ThePaypersOther
-http://feeds.feedburner.com/ThePaypersReports
-http://feeds.feedburner.com/ThePaypersBriefs
-http://feeds.feedburner.com/ThePaypersCompanyProfiles
-http://feeds.feedburner.com/ThePaypersAnalysis
-
-
-
-
-informationweek.com - http://www.informationweek.com/whitepaper/rss
-http://www.informationweek.com/rss_simple.asp
-http://www.informationweek.com/whitepaper/rss
-
-finovate.com
-
-finextra.com
-
-darkreading.com
-
-coindesk.com
-
-bankinnovation.net
-
-http://www.theeastafrican.co.ke/news/2558-2558-view-asFeed-kht4fy/index.xml
- 
-*/
 
 const responsefilterfunctions = {
     'standard': (feed) => {
@@ -62,9 +20,6 @@ const responsefilterfunctions = {
                 return [];
     },
     'entry': (feed) => {
-
-//        console.log("GETTING FEED ON ENTYR", feed);
-
         if (typeof feed['entry'] !== 'undefined') {
             if (Array.isArray(feed['entry']))
                 return feed['entry']
@@ -133,19 +88,11 @@ const itemfilterfunctions = {
             item['description'] = <string>item['description']
                 .replace(/<(?:.|\n)*?>/gm, '');
 
-            // title fix
+            // title fix - if it is too long
             if (item['feedlabel'].indexOf('Twitter') > -1)
                 item['title'] = item['description'].substring(0, 1000);
 
-            // some text cleaning for Huffington Post
-            if (item['feedlabel'].indexOf('Huffington') > -1)
-                item['description'] = item['description']
-                    .substring(item['description']
-                        .indexOf('Vidible);') + 'Vidible);'.length);
-
-            //        if (item['feedlabel'].indexOf('American Banker') > -1)
-            //       console.log('DEBUG item...', item, item['description']);
-
+            // return the promise result
             resolve(Object.assign(item,
                 {
                     thumbnail: img
@@ -205,57 +152,37 @@ const itemfilterfunctions = {
 @Injectable()
 export class NewsAggregatorService {
 
-    //   private newsFeed: Array<Object> = []; // all the feeds stored as objects
-    private activeFeeds: Object = {}; // feeds that are to be loaded
-    private activeNewsLoop: boolean = true;
-    private feedCollection: Array<Object> = [];
-
     private counter = 0;
     private totalcount = 0;
-    private activeFeedCollection = [];
 
     constructor(
-        private http: Http,//HTTP, // Http,// HTTP,//Http, // HTTP, //Http,
-        //    private debug: Debug,
+        private http: Http,
         private events: Events
-    ) {
-    };
+    ) { };
 
-    setFeeds(feeds) {
-        this.feedCollection = feeds;
-    }
+    loadRSSFeeds(feeds) {
 
-    // set the active services to be loading
-    setActiveServices(servicesettings) {
-        this.activeFeeds = servicesettings;
-    };
-
-    setLoading(value) {
-        this.activeNewsLoop = value;
-    }
-
-    doFullRefresh() {
         // taken from the internet, somewhere
         function hashCode(txt) {
             return txt.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
         }
 
-        // filter to get only the active ones
-        this.activeFeedCollection = this.feedCollection.filter(feed => {
-            return this.activeFeeds[feed['feedlabel']]
-        })
+        //console.log('FEEDS', feeds);
 
-        // counters for progress
+        // counters for progress indicator
         this.counter = 0;
-        this.totalcount = this.activeFeedCollection.length;
+        this.totalcount = feeds.length;
+
+        // the array which contains all the Observables for the feeds we are interested in
+        let feedsArray = [];
 
         // lets go through all the active feeds and create and observable for it
-        let feedsArray = [];
-        this.activeFeedCollection.map(ft => {
-            //let item = Observable.from(this.http.get(ft['feedurl'], {}, {}))
-                let item = this.http.get(ft['feedurl'])
+        feeds.map(feed => {
+
+            //let item = Observable.from(this.http.get(feed['feedurl'], {}, {}))  // for native HTTP
+            let item = this.http.get(feed['feedurl'])
                 .catch((error: any) => {
-                    this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': error.toString() + ' ' + ft['feedurl'], 'error': true });
+                    this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': error.toString() + ' ' + feed['feedurl'], 'error': true });
                     this.counter += 1;
                     return Observable.throw(error.json().error || 'Server error')
                 })
@@ -264,58 +191,54 @@ export class NewsAggregatorService {
                     let itemlist;
                     try {
                         let newsinput = XML.parse(rawinput.text());
-                        itemlist = responsefilterfunctions[ft['responsefilter']](newsinput);
+                        itemlist = responsefilterfunctions[feed['responsefilter']](newsinput);
                     }
                     catch (err) {
                         // there is an error in the XML parse, pass an empty feed
                         itemlist = []
                     }
+          //          console.log('1', itemlist, typeof itemlist, Array.isArray(itemlist), itemlist.length);
                     return itemlist;
                 })
                 .do(() => {
-                 //   console.log('SSSTTT', this.counter, this.totalcount - 1)
                     this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': '..' });
                     this.counter += 1;
                 })
-                // we want progress per feed
-                //    .do((val) => {
-                //  console.log('SSSTTT', this.counter, this.totalcount - 1, val['feedlabel'])
-                //      this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': val['feedlabel'] });
-                //   })
-                // and now we are going to process them per item
+               // .do(item => { console.log('3', item) })
                 .mergeAll()
-                // per item, we will enrich the content
+               // .do(item => { console.log('4', item) })
                 .map(item => {
+                 //   console.log('2', item)
+
                     // we are going to clean some words
-                    let cleanWords = ft['clearWords'];
+                    let cleanWords = feed['clearWords'];
                     if (Array.isArray(cleanWords))
                         cleanWords.map(word => {
                             while (item['title'].indexOf(word) > -1)
                                 item['title'] = item['title'].replace(word, '');
                         });
 
-                    // build a wrapper for the content
-                    let itemwrapper = {
-                        newsservice: '',
-                        defaultthumb: ft['defaultthumb'],
-                        prettylabel: ft['prettylabel'],
-                        feedlabel: ft['feedlabel'],
-                        hashcode: hashCode(item['title']),
-                        itemfilter: ft['itemfilter']
-                    };
+                    // add some data
+                    item['defaultthumb'] = feed['defaultthumb'];
+                    item['prettylabel'] = feed['prettylabel'];
+                    item['feedlabel'] = feed['feedlabel'];
+                    item['hashcode'] = hashCode(item['title']);
+                    item['itemfilter'] = feed['itemfilter'];
 
-                    return Object.assign({}, item, itemwrapper)
+                    return item;//Object.assign({}, item);
                 })
+               // .do(item => { console.log('5', item, item['itemfilter']) })
                 .flatMap(item => itemfilterfunctions[item['itemfilter']](item))
+             //   .do(item => { console.log('6', item) })
                 .onErrorResumeNext()
 
-            // add the observable to the array
+            // add the feed observable to the array
             feedsArray.push(item);
         });
 
-        // and we are going to return an Observable that iterates every x ms through the feeds 
+        // and we are going to return an Observable that iterates through all the observables in the array once subscribed to 
         return Observable.from(feedsArray)
-            //  .map((value) => { return Observable.from(value).delay(750); })
+            //  .map((value) => { return Observable.from(value).delay(750); })// every x ms through the feeds 
             .concatAll();
     }
 }

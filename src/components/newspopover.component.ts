@@ -9,8 +9,6 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { ViewChild, ElementRef } from '@angular/core';
 
-// for the cordova plugin check if we are running ionic serve
-declare var window;
 //declare var ColorThief: any;
 
 @Component({
@@ -26,7 +24,7 @@ declare var window;
               </button>
               </ion-col>
               <ion-col text-center>
-                <button (tap)="close(newsItem.link)" ion-button clear small color="danger" icon-left>       
+                <button (tap)="openBrowser(newsItem.link)" ion-button clear small color="danger" icon-left>       
                   Open Browser
                 </button>
               </ion-col>
@@ -57,8 +55,8 @@ export class NewsPopoverPage {
     private navParams: NavParams,
     public events: Events,
     public tstCntrllr: ToastController,
-    private socialSharing:SocialSharing,
-    private iab:InAppBrowser
+    private socialSharing: SocialSharing,
+    private iab: InAppBrowser
   ) {
     this.newsItem = this.navParams.get('data');
 
@@ -67,8 +65,6 @@ export class NewsPopoverPage {
 
     // how old? age in seconds -- below is not really really best coding (not really DRY)
     let age = Math.round((Date.now() - new Date(this.newsItem['pubTime']).getTime()) / 1000);
-
-    //console.log('POPOP', age, this.newsItem, Date.now());
 
     // counting days?
     this.howOld = '';
@@ -97,10 +93,8 @@ export class NewsPopoverPage {
     this.canClose = false;
 
     // check if the plugin is there to ensure ionic serve does not give issues
-    if (typeof window.plugins !== 'undefined')
-      this.socialSharing.share(
-        "", this.newsItem['description'], [], this.newsItem['link'])
-        .then(() => { })
+    this.socialSharing.share(
+      "", this.newsItem['description'], [], this.newsItem['link']);
 
     // hack to prevent bubbling
     setTimeout(() => {
@@ -111,79 +105,35 @@ export class NewsPopoverPage {
 
   ionViewDidLoad() {
     // let's estimate if the image is too white - BLANKED OUT NOG EEN KEER CHECKEN
-  //  let colorThief = new ColorThief();
- //   let color = colorThief.getPalette(this.myElement.nativeElement, 5);
+    //  let colorThief = new ColorThief();
+    //   let color = colorThief.getPalette(this.myElement.nativeElement, 5);
     //  this.debugData = JSON.stringify(color, null, 2);
     //console.log('DEBUG get colors p', this.myElement, this.debugData);
-  //  color.map(color => {
+    //  color.map(color => {
     //  if (color[0] + color[1] + color[2] > 3 * 200) this.shareColor = 'black';
-  //  });
-//
-
-    /* not working
-        console.log('DEBUG color  2', color);
-    
-    http://stackoverflow.com/questions/26015497/how-to-resize-then-crop-an-image-with-canvas
-        // try clipping
-        let c = document.createElement('canvas');
-        c.width = this.myElement.nativeElement.width;
-        c.height = this.myElement.nativeElement.heigth;
-        let ctx = c.getContext('2d');
-        ctx.drawImage(this.myElement.nativeElement, 0, 0);
-    
-        let image = new Image();
-        image.src = ctx.getImageData(0, 0, 10, 10);
-    
-        color = colorThief.getPalette(ctx, 5);
-        console.log('DEBUG color  ', color);
-        */
+    //  });
+    //
   }
-
-  /*
-  
-  Filters = {};
-  Filters.getPixels = function(img) {
-    var c = this.getCanvas(img.width, img.height);
-    var ctx = c.getContext('2d');
-    ctx.drawImage(img);
-    return ctx.getImageData(0,0,c.width,c.height);
-  };
-  
-  Filters.getCanvas = function(w,h) {
-    var c = document.createElement('canvas');
-    c.width = w;
-    c.height = h;
-    return c;
-  };
-  */
 
 
   toggleFavorite() {
     this.isFavorite = !this.isFavorite;
 
-    // console.log('DEBUG toggle favorite', this.isFavorite);
-
-    //use the eventbus, as we want to allow a backdrop - is double dutch on closePopover....
+    //use the eventbus, as we want to allow a backdrop 
     let hashcode = this.newsItem['hashcode'];
-    this.events.publish('toggle-favorite', { 'hashcode': hashcode, 'isFavorite': this.isFavorite, 'item':this.newsItem });
-
-    // and train a bit more based on favorite setting
-    //   if (this.isFavorite) this.wordlearner.learnWords(this.newsItem.wordstolearn, true, 5);
+    this.events.publish('toggle-favorite', { 'hashcode': hashcode, 'isFavorite': this.isFavorite, 'item': this.newsItem });
   }
 
-  close(url: string) {
-     let browser;
-    browser = this.iab.create(url, '_system'); // avoid tslint issue
+  openBrowser(url: string) {
+    let browser;
+    browser = this.iab.create(url, '_system'); 
     browser.show();
 
-    // apparently the user really likes this item, so teach the model additionally
-    // this.wordlearner.learnWords(this.newsItem.wordstolearn, true, 15);
-
+    this.canClose = true;
     this.closePopover();
   }
 
   closePopover() {
-
     if (this.canClose) {
       let retvalue = {};
       retvalue[this.newsItem.hashcode] = this.isFavorite;

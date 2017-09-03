@@ -1,11 +1,8 @@
-//import { Debug } from './../../providers/debug';
 import { Component } from '@angular/core';
+
 import {
-  ModalController,
   NavController, NavParams, ViewController, AlertController, ActionSheetController
 } from 'ionic-angular';
-
-import { AboutPage } from './../about/about';
 
 @Component({
   selector: 'page-feedselector',
@@ -26,23 +23,17 @@ export class FeedselectorPage {
 
   tags: Array<string> = [];
   tagSelection: Object = {};
-  appSettings: Object = {};
-  feedStatistics: Object = {};
-  hallOfFame: Object = {};
 
   constructor(
     public alertCtrl: AlertController,
     public navCtrl: NavController,
     public navParams: NavParams,
-  //  private debug: Debug,
-    private modalCtrl: ModalController,
-    private actionsheetCtrl: ActionSheetController,
+      private actionsheetCtrl: ActionSheetController,
     private viewCtrl: ViewController) { }
 
   ionViewDidLoad() {
     this.defaultFeeds = this.navParams.get('defaultFeeds');
     this.customFeeds = this.navParams.get('customFeeds');
-    this.appSettings = this.navParams.get('appSettings');
     this.selectedFeeds = this.navParams.get('selectedFeeds');
 
     this.defaultFeeds.map(feed => {
@@ -67,45 +58,10 @@ export class FeedselectorPage {
       this.tags.sort();
     });
 
-    //TODO:remove doubleentries in defaultfeeds!
-
     // Sort feedoverview
     this.refreshFeedList();
 
     this.refreshListOnTags();
-  }
-
-
-  /**
-  * Show the about page
-  * 
-  */
-  openAbout() {
-
-    // show the about page
-    let modal = this.modalCtrl.create(AboutPage, {
-      appSettings: this.appSettings,
-      feedStatistics: this.feedStatistics //,
-      //  model: {}, //this.wordlearner.getModel(),
-      //  hallOfFame: this.hallOfFame
-    }, { enableBackdropDismiss: true });
-
-    modal.present();
-
-    // handler for the action once the settings is closed
-    modal.onDidDismiss((value) => {
-
-      console.log('DEBUG receiving from about', value);
-
-      // place the settings if we did receive anything (backdrop delivers undefined, ESC press null)
-      if ((typeof value !== 'undefined') && (value !== null)) {
-
-        // store the setting in the app
-        this.appSettings = value['appSettings'];
-        this.feedStatistics = value['feedStatistics'];
-        //    this.hallOfFame = value['hallOfFame'];
-      }
-    });
   }
 
   toggleTagAll(value) {
@@ -117,7 +73,6 @@ export class FeedselectorPage {
 
 
   toggleAllTags(value) {
-
     this.tags.map(tag => {
       this.tagSelection[tag] = value
     });
@@ -191,9 +146,7 @@ export class FeedselectorPage {
     this.viewCtrl.dismiss({
       selectedFeeds: this.selectedFeeds,
       customFeeds: this.customFeeds,
-      appSettings: this.appSettings,
-      feedStatistics: this.feedStatistics,
-    }).then((err) => { console.log('ERROR dismiss feedselector add', err) });
+    }); 
   }
 
   // empty return, so the caller see an undefined
@@ -220,11 +173,9 @@ export class FeedselectorPage {
         */
         {
           text: 'Add Twitter',
-          //role: 'destructive',
           icon: 'logo-twitter',
           handler: () => {
             this.addTwitter();
-            //        this.debug.log('Delete clicked');
           }
         },
         {
@@ -239,15 +190,13 @@ export class FeedselectorPage {
           icon: 'logo-pinterest',
           handler: () => {
             this.addPinterest();
-            //          this.debug.log('Play clicked');
           }
         },
         {
           text: 'Cancel',
-          role: 'cancel', // will always sort to be on the bottom
+          role: 'cancel',
           icon: 'cancel',
           handler: () => {
-            //      this.debug.log('Cancel clicked');
           }
         }
       ]
@@ -426,5 +375,4 @@ export class FeedselectorPage {
     });
     prompt.present();
   }
-
 }
