@@ -9,11 +9,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { Component, ViewChild } from '@angular/core';
 
-
-/*
-todo:
-hall of fame: volgorde tijd als ook sliders 
-*/
+//import { Observable } from "rxjs/Rx";
 
 import {
   FabContainer, Content, //NavController,
@@ -63,9 +59,13 @@ export class Page1 {
   // collections of newsitems
   newsData: Object = {}; // the loaded newsitems, full data out of the http
   // newsIndex: Array<string> = []; // used to fill the view
-  newsCache: Array<string> = []; // all items (hashcode array) for the view
+  newsIndex: Array<string> = []; // all items (hashcode array) for the view
   newsBuffer: Array<string> = []; // all items buffered after the limit is reached
+
+  loadedItems: Array<Object> = [];
+  itemsInView: Array<Object> = [];
   seenItems: Array<string> = []; // the ones seen
+
   itemCount: number = 0;
   hallOfFame: Object = {}; // archived stuff
 
@@ -77,12 +77,12 @@ export class Page1 {
   debuginfo: string = "";
 
   // statistics
-  feedStatistics: Object = {};
+  //  feedStatistics: Object = {};
 
   // overall app settings  
   appSettings: Object = {
     'maxAge': 2,
-    'maxItemsInView': 300,
+    'maxItemsInView': 150,
     'refreshTime': 500,
     'pageScrollTime': 0,
     'bubbleDelay': 900,
@@ -96,7 +96,7 @@ export class Page1 {
 
   // for UI easening
   lastUserAction: number = 0; // time of the last user action
-  isReading: boolean = false; // is the user scrolling? we cannot add to the list then
+  //  isReading: boolean = false; // is the user scrolling? we cannot add to the list then
   isLoading: boolean = false;
   progressPercentage: string = "0%";
 
@@ -104,24 +104,18 @@ export class Page1 {
   @ViewChild(Content) content: Content;
 
   constructor(
-    // private navCtrl: NavController,
     private modalCtrl: ModalController,
     private popoverCtrl: PopoverController,
-    // private loadingCtrl: LoadingController,
     private newsservice: NewsAggregatorService,
     public keyboard: Keyboard,
     private toastCtrl: ToastController,
     public events: Events,
     public db: Db,
-    //private debug: Debug,
     private http: Http,
     private platform: Platform,
-    // private storage: Storage,
     private iab: InAppBrowser,
     private socialSharing: SocialSharing
-  ) {
-
-  }
+  ) { }
 
   /**
    * Lifecycle hook whenever the app is closed or loses focus, will save all stuff
@@ -139,7 +133,6 @@ export class Page1 {
       });
     }, 500);
   }
-
 
   ionViewDidLoad() {
     // event subscription -  a bit of an oddity here, needed to support backdrop click for PopoverPage
@@ -188,8 +181,8 @@ export class Page1 {
 
     // remove all items with the same label
     let feedlabel = item['feedlabel'];
-    for (var i = this.newsCache.length - 1; i >= 0; i--) {
-      let hashcode = this.newsCache[i];
+    for (var i = this.newsIndex.length - 1; i >= 0; i--) {
+      let hashcode = this.newsIndex[i];
       if (this.newsData[hashcode]['feedlabel'] == feedlabel)
         if (!this.newsData[hashcode]['favorite'])
           this.deleteNewsItem(hashcode);
@@ -205,11 +198,11 @@ export class Page1 {
 
   fabContainerClick() {
     this.lastUserAction = Date.now();
-    this.isReading = true;
+    //  this.isReading = true;
   }
 
   startScrolling() {
-    this.isReading = true;
+    //this.isReading = true;
   }
 
   stepScrollUp() {
@@ -262,9 +255,9 @@ export class Page1 {
 
     // close the fab
     if ((fab !== null) && (typeof fab !== 'undefined')) fab.close();
-    for (var i = this.newsCache.length - 1; i >= 0; i--) {
+    for (var i = this.newsIndex.length - 1; i >= 0; i--) {
 
-      let hashcode = this.newsCache[i];
+      let hashcode = this.newsIndex[i];
 
       if (!this.newsData[hashcode]['favorite']) {
         this.newsData[hashcode]['seen'] = true;
@@ -273,28 +266,38 @@ export class Page1 {
     }
 
     // check the buffer and add to the view what is possible
-    if (this.newsBuffer.length > 0) {
-      this.appSettings['maxItemsInView']
-
-      let cachelength = this.newsCache.length;
-      this.debuglog('START stuff ' + this.newsCache.length + ' ' + this.newsBuffer.length + ' ' + cachelength);
-      this.newsCache = this.newsCache
-        .concat(
-        this.newsBuffer
-          .slice(0, this.appSettings['maxItemsInView'] - cachelength)
-        );
-
-      this.newsBuffer = this.newsBuffer.slice(cachelength);
-
-      this.itemCount = this.newsCache.length;
-
-      this.debuglog('END stuff ' + this.newsCache.length + ' ' + this.newsBuffer.length + ' ' + cachelength);
-    }
+    /* if (this.newsBuffer.length > 0) {
+       this.appSettings['maxItemsInView']
+ 
+ 
+ 
+       let cachelength = this.newsIndex.length;
+       this.debuglog('START stuff ' + this.newsIndex.length + ' ' + this.newsBuffer.length + ' ' + cachelength);
+ 
+       console.log('SUTFFFF1', this.newsIndex, this.newsBuffer, cachelength);
+ 
+       this.newsIndex = this.newsIndex
+         .concat(
+         this.newsBuffer
+           .slice(0, this.appSettings['maxItemsInView'] - cachelength)
+         );
+ 
+       this.newsBuffer = this.newsBuffer.slice(cachelength);
+ 
+       this.itemCount = this.newsIndex.length;
+ 
+       this.fillView();
+ 
+       console.log('SUTFFFF2', this.newsIndex, this.newsBuffer, cachelength);
+ 
+       this.debuglog('END stuff ' + this.newsIndex.length + ' ' + this.newsBuffer.length + ' ' + cachelength);
+     }
+ */
 
 
     this.saveSettingsAndData();
     this.isLoading = false;
-    this.isReading = false;
+    //this.isReading = false;
 
     // go to top
     this.scrollToTop();
@@ -324,7 +327,7 @@ export class Page1 {
     if ((fab !== null) && (typeof fab !== 'undefined')) fab.close();
 
     // disable view updates
-    this.isReading = false;
+    //this.isReading = false;
 
     // show the page and we pass quite some data .... 
     let modal = this.modalCtrl.create(FeedselectorPage, {
@@ -332,7 +335,7 @@ export class Page1 {
       customFeeds: this.customFeeds,
       selectedFeeds: this.selectedFeeds,
       appSettings: this.appSettings,
-      feedStatistics: this.feedStatistics,
+      feedStatistics: {}, //this.feedStatistics,
       model: {},
       hallOfFame: this.hallOfFame
     }, { enableBackdropDismiss: true });
@@ -373,7 +376,7 @@ export class Page1 {
 
       // register the user action
       this.lastUserAction = Date.now();
-      this.isReading = true;
+      //this.isReading = true;
 
       // tslint message avoid
       let browser;
@@ -381,6 +384,7 @@ export class Page1 {
       browser.show();
 
       // statistics
+      /*
       let label = item['feedlabel'];
       if (typeof this.feedStatistics[label] === 'undefined') {
         this.feedStatistics[label] = {};
@@ -392,6 +396,7 @@ export class Page1 {
         this.feedStatistics[label]['last pub'] = 0;
       }
       this.feedStatistics[label]['deeplinks'] = this.feedStatistics[label]['deeplinks']['deeplinks'] + 1;
+      */
     }
   }
 
@@ -408,13 +413,14 @@ export class Page1 {
 
       // register the user action
       this.lastUserAction = Date.now();
-      this.isReading = true;
+      //this.isReading = true;
 
       // create the popover
       let popover = this.popoverCtrl
         .create(NewsPopoverPage, { data: item }, { enableBackdropDismiss: true });
 
       // statistics - not very dry
+      /*
       let label = item['feedlabel'];
       if (typeof this.feedStatistics[label] === 'undefined') {
         this.feedStatistics[label] = {};
@@ -425,7 +431,7 @@ export class Page1 {
         this.feedStatistics[label]['deeplinks'] = 0;
       }
       this.feedStatistics[label]['clicks'] = this.feedStatistics[label]['clicks'] + 1;
-
+*/
       // present the popover, no event passed, so it will be centered
       popover.present({});
     }
@@ -436,9 +442,12 @@ export class Page1 {
 
     this.debuginfo = "";
 
+    //    console.log('SDADSDSAD',Observable.of(5,8,7,9,1,0,6,6,5).toArray().map(arr=>arr.sort()).subscribe(x=>console.log(x)));
+
+
     // allow for full loading, only if loading is not already in progress
     if (!this.isLoading) {
-      this.isReading = false;
+      // this.isReading = false;
       this.isLoading = true;
       this.newsservice.setLoading(true);
 
@@ -452,32 +461,55 @@ export class Page1 {
           let hashcode = item['hashcode'];
 
           // is the item already in the database? e.g. seen??
-          if (typeof this.newsData[hashcode] !== 'undefined') additem = false;
+          //if (typeof this.newsData[hashcode] !== 'undefined') additem = false;
+          if (this.seenItems.indexOf(hashcode) > -1) additem = false;
+
+          // check the date
           if ((Date.now() - item['pubTime']) > (this.appSettings['maxAge'] * 24 * 60 * 60 * 1000))
             additem = false;
 
           return additem;
         })
+        .toArray()
         .subscribe(
         (item) => {
-          this.addNewsItem(item);
-          this.debuglog('.');
+          console.log('DOING ', item);
+          //
+          this.loadedItems = item;
         },
-        (error) => {
-          this.isLoading = false;
-          this.debuglog('error' + JSON.stringify(error));
-          console.log('ERROR 447', error);
+        (item) => {
+          console.log('DONE', item);
           this.events.publish('progress', { 'value': 0, 'total': 1, 'text': '' });
-        },
-        () => {
-          //          console.log('done');
-          //   if (!this.isReading) this.fillView();
-          this.isLoading = false;
-          this.events.publish('progress', { 'value': 0, 'total': 1, 'text': '' });
-
-          // done loading, sort the stuff
           this.fillView();
-        });
+        },
+        (item) => {
+          console.log('ERROR ', item);
+          this.events.publish('progress', { 'value': 0, 'total': 1, 'text': '' });
+          this.fillView();
+        }
+        )
+      /*
+      .subscribe(
+      (item) => {
+        this.addNewsItem(item);
+        this.debuglog('.');
+      },
+      (error) => {
+        this.isLoading = false;
+        this.debuglog('error' + JSON.stringify(error));
+        console.log('ERROR 447', error);
+        this.events.publish('progress', { 'value': 0, 'total': 1, 'text': '' });
+      },
+      () => {
+        //          console.log('done');
+        //   if (!this.isReading) this.fillView();
+        this.isLoading = false;
+        this.events.publish('progress', { 'value': 0, 'total': 1, 'text': '' });
+
+        // done loading, sort the stuff
+        this.fillView();
+      });
+      */
     }
   }
 
@@ -487,29 +519,31 @@ export class Page1 {
 
     delete (this.newsData[hashcode]);
 
-    this.newsCache.splice(this.newsCache.indexOf(hashcode), 1);
+    this.newsIndex.splice(this.newsIndex.indexOf(hashcode), 1);
     this.itemCount--;
   }
 
   addNewsItem(item) {
     let hashcode = item['hashcode'];
 
-    //appSettings: Object = {
-    //  'maxAge': 2,
-    //  'maxItemsInView': 200,
+    console.log('SKAJDSLAJDS', item, this.appSettings['maxItemsInView'], this.newsData, this.newsIndex.length, this.itemCount);
 
     // we have a new item
-    if (this.newsCache.length < this.appSettings['maxItemsInView']) {
+    if (this.newsIndex.length < this.appSettings['maxItemsInView']) {
       if (!this.newsData[hashcode]) {
-        this.newsCache.push(hashcode);
+        this.newsIndex.push(hashcode);
         this.newsData[hashcode] = Object.assign(
           {
             favorite: false,
             seen: false
           }, item);
         this.itemCount++;
+
+        this.loadedItems.push(item);
       }
-    } else {
+    }
+    /*
+    else {
       this.newsData[hashcode] = Object.assign(
         {
           favorite: false,
@@ -517,44 +551,63 @@ export class Page1 {
         }, item);
 
       // sort if the max was reached
-      if (this.newsCache.length == (this.appSettings['maxItemsInView'] + 1)) this.fillView();
+      if (this.newsIndex.length == (this.appSettings['maxItemsInView'] + 1)) this.fillView();
 
       this.newsBuffer.push(hashcode);
     }
+    */
   }
 
   fillView() {
 
-    this.itemCount = this.newsCache.length;
 
-    if (this.appSettings['sortdate']) {
-      this.newsCache.sort(
-        (a, b) => {
-          if (this.newsData[a]['pubTime'] > this.newsData[b]['pubTime']) {
-            return -1;
-          }
-          if (this.newsData[a]['pubTime'] < this.newsData[b]['pubTime']) {
-            return 1;
-          }
-          return 0;
+    //    console.log('LOADED items pre', this.loadedItems);
+    this.loadedItems.sort(
+      (a, b) => {
+        // console.log('SORT',a,b);
+        if (a['pubTime'] > b['pubTime']) {
+          return -1;
         }
-      )
-    }
+        if (a['pubTime'] < b['pubTime']) {
+          return 1;
+        }
+        return 0;
+      }
+    )
+    //    console.log('LOADED items post', this.loadedItems);
 
-    if (!this.appSettings['sortdate']) {
-      console.log('sorting', this.appSettings['sortdate']);
-      this.newsCache.sort(
-        (a, b) => {
-          if (this.newsData[a]['feedlabel'] < this.newsData[b]['feedlabel']) {
-            return -1;
-          }
-          if (this.newsData[a]['feedlabel'] > this.newsData[b]['feedlabel']) {
-            return 1;
-          }
-          return 0;
+    this.itemCount = this.loadedItems.length;
+    /*
+        if (this.appSettings['sortdate']) {
+          this.newsIndex.sort(
+            (a, b) => {
+              if (this.newsData[a]['pubTime'] > this.newsData[b]['pubTime']) {
+                return -1;
+              }
+              if (this.newsData[a]['pubTime'] < this.newsData[b]['pubTime']) {
+                return 1;
+              }
+              return 0;
+            }
+          )
         }
-      );
-    }
+    
+        if (!this.appSettings['sortdate']) {
+          console.log('sorting', this.appSettings['sortdate']);
+          this.newsIndex.sort(
+            (a, b) => {
+              if (this.newsData[a]['feedlabel'] < this.newsData[b]['feedlabel']) {
+                return -1;
+              }
+              if (this.newsData[a]['feedlabel'] > this.newsData[b]['feedlabel']) {
+                return 1;
+              }
+              return 0;
+            }
+          );
+        }
+    */
+
   }
 
   /**
@@ -584,6 +637,7 @@ export class Page1 {
    */
   addItemToLabelStatistics(item) {
     // statics
+    /*
     let label = item['feedlabel'];
     if (typeof this.feedStatistics[label] === 'undefined') {
       this.feedStatistics[label] = {};
@@ -600,6 +654,7 @@ export class Page1 {
     this.feedStatistics[label]['relevance'] = this.feedStatistics[label]['relevance'] + item['relevance'];
     if (item['pubTime'] > this.feedStatistics[label]['last pub'])
       this.feedStatistics[label]['last pub'] = item['pubTime'];
+      */
   }
 
   debuglog(s) {
@@ -628,7 +683,7 @@ export class Page1 {
       .then(re => { this.debuglog('Setting as'); });
 
     // statistics
-    this.db.setkey('feedStatistics', this.feedStatistics)
+    this.db.setkey('feedStatistics', {})//this.feedStatistics)
       .then(re => { this.debuglog('Setting fs'); });
 
     this.db.setkey('selectedFeeds', this.selectedFeeds)
@@ -717,8 +772,8 @@ export class Page1 {
     this.db.getkey('feedStatistics').then(
       (val) => {
         this.debuglog('DEBUG stat type ' + typeof val);
-        if (val != null)
-          this.feedStatistics = val;
+        //        if (val != null)
+        //        this.feedStatistics = {} // val;
         this.debuglog('DEBUG loaded feedstatistics');
       })
       .catch(err => { this.debuglog('ERROR fs' + JSON.stringify(err)) })

@@ -426,16 +426,7 @@
     "itemfilter": "standard",
     "defaultthumb": "assets/img/capgemini.png"
   },
-  {
-    "feedlabel": "Cap Gemini Latest Global News",
-    "prettylabel": "Cap Gemini Latest Global News",
-    "feedurl": "https://www.capgemini.com/rss.php/name/newsroom/p0/ss_language%3Aen",
-    "tags": "tech",
-    "clearWords": [],
-    "responsefilter": "standard",
-    "itemfilter": "standard",
-    "defaultthumb": "assets/img/capgemini.png"
-  },
+  
   {
     "feedlabel": "Cap Gemini CTO blog",
     "prettylabel": "Cap Gemini CTO blog",

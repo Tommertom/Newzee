@@ -63,7 +63,7 @@ const responsefilterfunctions = {
     },
     'entry': (feed) => {
 
-        console.log("GETTING FEED ON ENTYR", feed);
+//        console.log("GETTING FEED ON ENTYR", feed);
 
         if (typeof feed['entry'] !== 'undefined') {
             if (Array.isArray(feed['entry']))
