@@ -35,9 +35,8 @@ Some known issues:
 * Run `ionic serve` to have the project compiled for the first time 
 
 Needs cordova plugins (after full install and compile):
-* `ionic cordova platform add android` (or iOS) - will also install plugins below:
 * `ionic cordova plugin add --save cordova-plugin-inappbrowser` 
-* `ionic cordova  plugin add --save cordova-plugin-x-socialsharing`
+* `ionic cordova plugin add --save cordova-plugin-x-socialsharing`
 * `ionic cordova plugin add --save cordova-sqlite-storage `
 
 This demo is available in Ionic View (similar to Apple's Testflight) under app ID `e141e4d5`. Download Ionic View (legacy version) in your app store (android/iOS), register free 
