@@ -53,6 +53,7 @@ export class HomePage {
   loadedItems: Array<Object> = [];
   bufferedItems: Array<Object> = [];
   seenItems: Array<string> = [];
+  loadedItems: Object = {};
   itemCount: number = 0;
   hallOfFame: Object = {};
 
@@ -364,7 +365,7 @@ export class HomePage {
           .filter(feed => {
             return this.selectedFeeds[feed['feedlabel']]
           })
-
+ 
       )
         .filter((item) => {
 
@@ -374,6 +375,10 @@ export class HomePage {
 
           // is the item already in the database? e.g. seen??
           if (this.seenItems.indexOf(hashcode) > -1) additem = false;
+
+          // have we loaded it in this session already?
+          if (this.loadedItems[hashcode]) additem = false
+          else this.loadedItems[hashcode] = true;
 
           // check the date
           if ((Date.now() - item['pubTime']) > (this.appSettings['maxAge'] * 24 * 60 * 60 * 1000))
