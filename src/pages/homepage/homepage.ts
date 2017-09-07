@@ -53,7 +53,6 @@ export class HomePage {
   loadedItems: Array<Object> = [];
   bufferedItems: Array<Object> = [];
   seenItems: Array<string> = [];
-  loadedItems: Object = {};
   itemCount: number = 0;
   hallOfFame: Object = {};
 
@@ -128,7 +127,7 @@ export class HomePage {
       this.progressPercentage = Math.round((100 * data['value']) / data['total']).toString() + '%';
 
       if (data.error)
-        this.debuginfo += ('\nERROR ' + data.text);
+        this.debuginfo += ('<br>ERROR ' + data.text);
     });
   }
   // END OF LIFECYCLE HOOKS
