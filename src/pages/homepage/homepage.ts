@@ -21,6 +21,14 @@ import { NewsAggregatorService } from './../../providers/newsaggregator.services
 import { Db } from './../../providers/db';
 
 
+/*
+
+  <ion-refresher (ionRefresh)="doPullRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+*/
+
 /**
  * Component HomePage 
  * 
@@ -233,8 +241,8 @@ export class HomePage {
     for (var i = this.loadedItems.length - 1; i >= 0; i--) {
 
       // only delete items which are not marked favorite
-      if (!this.loadedItems[i]['favorite']) {
-
+      //      if (!this.loadedItems[i]['favorite']) {
+      {
         if (this.seenItems.indexOf(this.loadedItems[i]['hashcode']) < 0)
           this.seenItems.push(this.loadedItems[i]['hashcode']);
 
@@ -364,7 +372,7 @@ export class HomePage {
           .filter(feed => {
             return this.selectedFeeds[feed['feedlabel']]
           })
- 
+
       )
         .filter((item) => {
 
@@ -418,7 +426,6 @@ export class HomePage {
 
   updateView() {
     // concat all items 
-    //console.log('SADSDA1', this.loadedItems.length, this.bufferedItems.length);
     this.loadedItems = this.loadedItems.concat(this.bufferedItems)
     this.loadedItems.sort((a, b) => {
       if (a['pubTime'] > b['pubTime']) {
@@ -430,10 +437,8 @@ export class HomePage {
       return 0;
     });
 
-    //  console.log('SADSDA2', this.loadedItems.length, this.bufferedItems.length);
     this.bufferedItems = this.loadedItems.slice(this.appSettings['maxItemsInView']);
     this.loadedItems = this.loadedItems.slice(0, this.appSettings['maxItemsInView']);
-    //    console.log('SADSDA3', this.loadedItems.length, this.bufferedItems.length);
 
     this.itemCount = this.loadedItems.length;
 
