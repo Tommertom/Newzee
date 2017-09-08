@@ -21,7 +21,7 @@
     <button icon-only style="background-color:transparent" ion-fab (click)="seenAllItems()"> 
          <ion-icon style="font-weight: 900;color:black" name="trash"></ion-icon>
     </button>
-  </ion-fab> 
+  </ion-fab>
   <ion-fab right bottom *ngIf="itemCount > 0">
     <button icon-only style="background-color:transparent" color="black" ion-fab (click)="stepScrollDown()"> 
          <ion-icon style="font-weight: 900;color:black"  name="arrow-down"></ion-icon>
@@ -29,39 +29,42 @@
   </ion-fab>
   <ion-list no-lines [virtualScroll]="loadedItems" [bufferRatio]="10" [approxItemHeight]="'55px'">
     <ion-item-sliding #slider *virtualItem="let item">
-      <ion-item text-wrap style="padding:0px" (press)="pressEvent(item,$event)" (click)="clickEvent(item,$event)">
+      <ion-item text-wrap style="padding:0px" (click)="clickEvent(item,$event)">
         <ion-thumbnail item-left style="margin-top:0px;margin-bottom:0px">
           <ion-img *ngIf="item?.thumbnail" [src]="item.thumbnail"></ion-img>
           <span *ngIf="item?.favorite" style="color:darkred;position:absolute; top:10px;left:10px;">
               <ion-icon name='heart'></ion-icon>
              </span>
-          </ion-thumbnail>
-          <b style="font-size:85%" [innerHTML]="item?.title"></b>
-          <span style="color: gray;font-size:70%;position:absolute; bottom:0;right:0px;">{{item?.prettylabel}}</span>
-          </ion-item>
-          <ion-item-options side="left">
-            <button ion-button color="primary" (click)="toggleFavorite(item, slider)" icon-left>
+        </ion-thumbnail>
+        <b style="font-size:85%" [innerHTML]="item?.title"></b>
+        <span style="color: gray;font-size:70%;position:absolute; bottom:0;right:0px;">{{item?.prettylabel}}</span>
+      </ion-item>
+      <ion-item-options side="left">
+        <button ion-button color="primary" (click)="toggleFavorite(item, slider)" icon-left>
                   <ion-icon name="heart"></ion-icon>Item
                 </button>
-            <button ion-button color="secondary" (click)="doSocialShare(item, slider)" icon-left>
+        <button ion-button color="light" (click)="pressEvent(item, slider)" icon-left>
+                  <ion-icon name="open"></ion-icon>Item
+                </button>
+        <button ion-button color="secondary" (click)="doSocialShare(item, slider)" icon-left>
                   <ion-icon name="share-alt"></ion-icon>Share
                 </button>
-            <button ion-button color="danger" (click)="deleteItem(item, slider)" icon-left>
+        <button ion-button color="danger" (click)="deleteItem(item, slider)" icon-left>
                   <ion-icon name="trash"></ion-icon>Item
                 </button>
-          </ion-item-options>
-          <ion-item-options side="right">
-            <button ion-button color="dark" (click)="deleteFeed(item, slider)" icon-left>
+      </ion-item-options>
+      <ion-item-options side="right">
+        <button ion-button color="dark" (click)="deleteFeed(item, slider)" icon-left>
                   <ion-icon name="trash"></ion-icon>Feed
                 </button>
-            <button ion-button color="secondary" (click)="showFeedSelector(slider)" icon-left>
+        <button ion-button color="secondary" (click)="showFeedSelector(slider)" icon-left>
                   <ion-icon name="settings"></ion-icon>Feed
                 </button>
-            <button ion-button color="primary" (click)="showHallOfFame(slider)" icon-left>
+        <button ion-button color="primary" (click)="showHallOfFame(slider)" icon-left>
                   <ion-icon name="heart"></ion-icon>Hall
                 </button>
-          </ion-item-options>
-          </ion-item-sliding>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
   <span *ngIf="itemCount == 0">
     <br><br><br>
@@ -69,5 +72,5 @@
     <ion-icon *ngIf="!isLoading" style="font-size:1400%;color:black" name="refresh" (click)="doPushRefresh()"></ion-icon>
 </div>
 </span>
-<span [innerHTML]="debuginfo"></span>
+  <span [innerHTML]="debuginfo"></span>
 </ion-content>

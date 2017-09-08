@@ -73,7 +73,7 @@ export class HomePage {
   // overall app settings  
   appSettings: Object = {
     'maxAge': 2,
-    'maxItemsInView': 225,
+    'maxItemsInView': 1225,
     'refreshTime': 500,
     'pageScrollTime': 0,
     'bubbleDelay': 900,
@@ -135,7 +135,7 @@ export class HomePage {
       this.progressPercentage = Math.round((100 * data['value']) / data['total']).toString() + '%';
 
       if (data.error)
-        this.debuginfo += ('<br>ERROR ' + data.text);
+        this.debuginfo += ('<br> ' + data.text);
     });
   }
   // END OF LIFECYCLE HOOKS
@@ -315,6 +315,7 @@ export class HomePage {
   * 
   * @param {Event} event - The event passed on
   * @param {Object} item - The newsitem
+  * HTML removed: (press)="pressEvent(item,$event)" 
   */
   pressEvent(item, event) {
 
@@ -363,7 +364,7 @@ export class HomePage {
     // allow for full loading, only if loading is not already in progress
     if (!this.isLoading) {
 
-   //   console.log('In refresh');
+      //   console.log('In refresh');
 
       this.isLoading = true;
 
@@ -377,7 +378,7 @@ export class HomePage {
           })
 
       )
-      //  .do(item => { console.log('DEBUG0', item) })
+        //  .do(item => { console.log('DEBUG0', item) })
         .filter((item) => {
 
           //console.log('In refresh1', item);
@@ -399,9 +400,9 @@ export class HomePage {
 
           return additem;
         })
-       // .do(item => { console.log('DEBUG1', item) })
+        // .do(item => { console.log('DEBUG1', item) })
         .toArray()
-      //  .do(item => { console.log('DEBUG2', item) })
+        //  .do(item => { console.log('DEBUG2', item) })
         .subscribe(
         (newitems) => {
           this.bufferedItems = newitems;
@@ -436,9 +437,9 @@ export class HomePage {
 
   updateView() {
     // concat all items 
-  //  console.log('updateView', this.loadedItems, this.bufferedItems)
+    //  console.log('updateView', this.loadedItems, this.bufferedItems)
     this.loadedItems = this.loadedItems.concat(this.bufferedItems)
-   // console.log('updateView2', this.loadedItems, this.bufferedItems)
+    // console.log('updateView2', this.loadedItems, this.bufferedItems)
 
     this.loadedItems.sort((a, b) => {
       if (a['pubTime'] > b['pubTime']) {
@@ -450,12 +451,12 @@ export class HomePage {
       return 0;
     });
 
-   // console.log('updateView3', this.loadedItems, this.bufferedItems)
-    this.bufferedItems = this.loadedItems.slice(this.appSettings['maxItemsInView']);
-   // console.log('updateView4', this.loadedItems, this.bufferedItems)
+    // console.log('updateView3', this.loadedItems, this.bufferedItems)
+    this.bufferedItems = this.loadedItems.slice(2000); //this.appSettings['maxItemsInView']);
+    // console.log('updateView4', this.loadedItems, this.bufferedItems)
 
-    this.loadedItems = this.loadedItems.slice(0, this.appSettings['maxItemsInView']);
-   // console.log('updateView5', this.loadedItems, this.bufferedItems)
+    this.loadedItems = this.loadedItems.slice(0, 2000); // this.appSettings['maxItemsInView']);
+    // console.log('updateView5', this.loadedItems, this.bufferedItems)
 
     this.itemCount = this.loadedItems.length;
 
@@ -490,8 +491,8 @@ export class HomePage {
 
     // clear seen items but make sure not too many are stored
     this.debuglog('SEEN ITEM COUNT ' + this.seenItems.length);
-    if (this.seenItems.length > 2000) {
-      this.seenItems = this.seenItems.slice(-100);
+    if (this.seenItems.length > 3000) {
+      this.seenItems = this.seenItems.slice(-1500);
       this.debuglog('CUTTING' + this.seenItems.length);
     }
 
