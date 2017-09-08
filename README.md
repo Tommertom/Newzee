@@ -39,7 +39,7 @@ Needs cordova plugins (after full install and compile):
 * `ionic cordova plugin add --save cordova-plugin-x-socialsharing`
 * `ionic cordova plugin add --save cordova-sqlite-storage `
 
-This demo is available in Ionic View (similar to Apple's Testflight) under app ID `E141E4D5`. Download Ionic View (legacy version) in your app store (android/iOS), register free 
+This demo is available in Ionic View (similar to Apple's Testflight) under app ID `365fdabe`. Download Ionic View (legacy version) in your app store (android/iOS), register free 
 Ionic account (https://apps.ionic.io/signup) and enjoy. Assure you do a `Clear App Data` in Ionic View
 if you want to enjoy the latest committed version.  NOTE: some of the feeds are not working in `ionic serve` due to CORS restrictions
 

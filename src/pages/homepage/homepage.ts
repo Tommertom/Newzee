@@ -362,6 +362,9 @@ export class HomePage {
 
     // allow for full loading, only if loading is not already in progress
     if (!this.isLoading) {
+
+   //   console.log('In refresh');
+
       this.isLoading = true;
 
       // load the feeds from the active feeds
@@ -374,8 +377,10 @@ export class HomePage {
           })
 
       )
+      //  .do(item => { console.log('DEBUG0', item) })
         .filter((item) => {
 
+          //console.log('In refresh1', item);
           // we are going to add this item, unless otherwise is defined below
           let additem = true;
           let hashcode = item['hashcode'];
@@ -383,9 +388,10 @@ export class HomePage {
           // is the item already in the database? e.g. seen??
           if (this.seenItems.indexOf(hashcode) > -1) additem = false;
 
-          // have we loaded it in this session already?
-          if (this.loadedItems[hashcode]) additem = false
-          else this.loadedItems[hashcode] = true;
+          // have we loaded it in this session already (in view or already in buffer)
+          if (this.loadedItems
+            .concat(this.bufferedItems)
+            .find(item => item['hashcode'] === hashcode)) additem = false;
 
           // check the date
           if ((Date.now() - item['pubTime']) > (this.appSettings['maxAge'] * 24 * 60 * 60 * 1000))
@@ -393,20 +399,24 @@ export class HomePage {
 
           return additem;
         })
+       // .do(item => { console.log('DEBUG1', item) })
         .toArray()
+      //  .do(item => { console.log('DEBUG2', item) })
         .subscribe(
         (newitems) => {
           this.bufferedItems = newitems;
+          //  this.updateView();
+        },
+        (item) => {
+          this.events.publish('progress', { 'value': 0, 'total': 1, 'text': '' });
+          this.isLoading = false;
+          console.log('COMPLETE', item)
           this.updateView();
         },
         (item) => {
           this.events.publish('progress', { 'value': 0, 'total': 1, 'text': '' });
           this.isLoading = false;
-          this.updateView();
-        },
-        (item) => {
-          this.events.publish('progress', { 'value': 0, 'total': 1, 'text': '' });
-          this.isLoading = false;
+          console.log('COMPLETE ERROR', item)
           this.updateView();
         })
     }
@@ -426,7 +436,10 @@ export class HomePage {
 
   updateView() {
     // concat all items 
+  //  console.log('updateView', this.loadedItems, this.bufferedItems)
     this.loadedItems = this.loadedItems.concat(this.bufferedItems)
+   // console.log('updateView2', this.loadedItems, this.bufferedItems)
+
     this.loadedItems.sort((a, b) => {
       if (a['pubTime'] > b['pubTime']) {
         return -1;
@@ -437,8 +450,12 @@ export class HomePage {
       return 0;
     });
 
+   // console.log('updateView3', this.loadedItems, this.bufferedItems)
     this.bufferedItems = this.loadedItems.slice(this.appSettings['maxItemsInView']);
+   // console.log('updateView4', this.loadedItems, this.bufferedItems)
+
     this.loadedItems = this.loadedItems.slice(0, this.appSettings['maxItemsInView']);
+   // console.log('updateView5', this.loadedItems, this.bufferedItems)
 
     this.itemCount = this.loadedItems.length;
 

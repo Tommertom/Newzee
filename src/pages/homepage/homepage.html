@@ -27,17 +27,17 @@
          <ion-icon style="font-weight: 900;color:black"  name="arrow-down"></ion-icon>
     </button>
   </ion-fab>
-  <ion-list no-lines [virtualScroll]="loadedItems" [bufferRatio]="10">
+  <ion-list no-lines [virtualScroll]="loadedItems" [bufferRatio]="10" [approxItemHeight]="'55px'">
     <ion-item-sliding #slider *virtualItem="let item">
       <ion-item text-wrap style="padding:0px" (press)="pressEvent(item,$event)" (click)="clickEvent(item,$event)">
         <ion-thumbnail item-left style="margin-top:0px;margin-bottom:0px">
-          <ion-img [src]="item.thumbnail"></ion-img>
-          <span *ngIf="item.favorite" style="color:darkred;position:absolute; top:10px;left:10px;">
+          <ion-img *ngIf="item?.thumbnail" [src]="item.thumbnail"></ion-img>
+          <span *ngIf="item?.favorite" style="color:darkred;position:absolute; top:10px;left:10px;">
               <ion-icon name='heart'></ion-icon>
              </span>
           </ion-thumbnail>
-          <b style="font-size:85%" [innerHTML]="item.title"></b>
-          <span style="color: gray;font-size:70%;position:absolute; bottom:0;right:0px;">{{item.prettylabel}}</span>
+          <b style="font-size:85%" [innerHTML]="item?.title"></b>
+          <span style="color: gray;font-size:70%;position:absolute; bottom:0;right:0px;">{{item?.prettylabel}}</span>
           </ion-item>
           <ion-item-options side="left">
             <button ion-button color="primary" (click)="toggleFavorite(item, slider)" icon-left>
