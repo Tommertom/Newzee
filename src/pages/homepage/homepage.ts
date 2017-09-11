@@ -112,6 +112,11 @@ export class HomePage {
     private socialSharing: SocialSharing
   ) { }
 
+
+  debuglog(s) {
+    this.debuginfo = this.debuginfo + '<br>' + s;
+  }
+
   /**
    * Lifecycle hook whenever the app is closed or loses focus, will save all stuff
    * 
@@ -487,10 +492,6 @@ export class HomePage {
     });
 
     toast.present();
-  }
-
-  debuglog(s) {
-    this.debuginfo = this.debuginfo + '<br>' + s;
   }
 
   saveSettingsAndData() {

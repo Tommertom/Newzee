@@ -203,7 +203,7 @@ export class NewsAggregatorService {
                     return itemlist;
                 })
                 .do(() => {
-                    this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': feed['feedurl'].substring(0,40), error:true });
+                    this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': feed['feedurl'].substring(0,25), error:true });
                     this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': '..' });
                     this.counter += 1;
                 })
