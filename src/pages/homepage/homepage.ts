@@ -27,6 +27,11 @@ import { Db } from './../../providers/db';
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+
+  <ion-list no-lines [virtualScroll]="loadedItems" [bufferRatio]="10" [approxItemHeight]="'55px'">
+    <ion-item-sliding #slider *virtualItem="let item">
+  
+
 */
 
 /**
@@ -234,6 +239,8 @@ export class HomePage {
 
     // register the user action 
     this.lastUserAction = Date.now();
+
+    this.debuginfo="";
 
     // close the fab
     if ((fab !== null) && (typeof fab !== 'undefined')) fab.close();
@@ -501,22 +508,28 @@ export class HomePage {
 
     // save the custom feeds
     this.db.setkey('customFeeds', this.customFeeds)
-      .then(re => { this.debuglog('Setting cf') });
+      .then(re => {// this.debuglog('Setting cf')
+     });
 
     // hall of fame
     this.db.setkey('hallOfFame', this.hallOfFame)
-      .then(re => { this.debuglog('Setting hf'); });
+      .then(re => { // this.debuglog('Setting hf'); 
+    
+  });
 
     // app settings
     this.db.setkey('appSettings', this.appSettings)
-      .then(re => { this.debuglog('Setting as'); });
+      .then(re => { // this.debuglog('Setting as'); 
+     });
 
     // statistics
     this.db.setkey('feedStatistics', {})//this.feedStatistics)
-      .then(re => { this.debuglog('Setting fs'); });
+      .then(re => { //this.debuglog('Setting fs'); 
+    });
 
     this.db.setkey('selectedFeeds', this.selectedFeeds)
-      .then(re => { this.debuglog('Setting sf'); });
+      .then(re => { //this.debuglog('Setting sf'); 
+    });
   }
 
   loadSettingsAndData() {

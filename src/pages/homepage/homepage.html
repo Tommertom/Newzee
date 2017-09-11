@@ -27,8 +27,8 @@
          <ion-icon style="font-weight: 900;color:black"  name="arrow-down"></ion-icon>
     </button>
   </ion-fab>
-  <ion-list no-lines [virtualScroll]="loadedItems" [bufferRatio]="10" [approxItemHeight]="'55px'">
-    <ion-item-sliding #slider *virtualItem="let item">
+  <ion-list no-lines>
+    <ion-item-sliding #slider *ngFor="let item of loadedItems">
       <ion-item text-wrap style="padding:0px" (click)="clickEvent(item,$event)">
         <ion-thumbnail item-left style="margin-top:0px;margin-bottom:0px">
           <ion-img *ngIf="item?.thumbnail" [src]="item.thumbnail"></ion-img>
@@ -72,5 +72,10 @@
     <ion-icon *ngIf="!isLoading" style="font-size:1400%;color:black" name="refresh" (click)="doPushRefresh()"></ion-icon>
 </div>
 </span>
-  <span [innerHTML]="debuginfo"></span>
+  <ion-card>
+    <ion-card-header>DEBUG</ion-card-header>
+    <ion-card-content>
+      <span [innerHTML]="debuginfo"></span>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
