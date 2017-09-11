@@ -227,6 +227,28 @@
     "defaultthumb": "assets/img/UNCDFMM4P.jpg"
   },
   {
+    "feedlabel": "Twitter FSD Uganda",
+    "prettylabel": "Twitter FDS Uganda",
+    "feedurl": "https://queryfeed.net/tw?q=%40FSDUganda",
+    "tags": "twitter",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
+
+  {
+    "feedlabel": "Twitter FSD Zambia",
+    "prettylabel": "Twitter FDS Zambia",
+    "feedurl": "https://queryfeed.net/tw?q=%40FSDZambia",
+    "tags": "twitter",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
+  
+  {
     "feedlabel": "Twitter CGAP",
     "prettylabel": "Twitter CGAP",
     "feedurl": "https://queryfeed.net/tw?q=%40CGAP",

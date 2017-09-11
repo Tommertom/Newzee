@@ -572,7 +572,7 @@ export class HomePage {
     this.db.getkey('seenItems').then(
       (val) => {
         if (val != null) {
-          this.seenItems = []; //val;
+          this.seenItems = val;
           this.debuglog('SEEN ITEMS COUNT :' + this.seenItems.length.toString());
         }
       })

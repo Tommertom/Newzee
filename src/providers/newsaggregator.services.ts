@@ -182,7 +182,7 @@ export class NewsAggregatorService {
 
             //let item = Observable.from(this.http.get(feed['feedurl'], {}, {}))  // for native HTTP
             let item = this.http.get(feed['feedurl'])
-                .do(() => console.log('LOADING ', feed['feedurl']))
+           //     .do(() => console.log('LOADING ', feed['feedurl']))
                 .catch((error: any) => {
                     this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': error.toString() + ' ' + feed['feedurl'], 'error': true });
                     this.counter += 1;
@@ -203,7 +203,7 @@ export class NewsAggregatorService {
                     return itemlist;
                 })
                 .do(() => {
-                    this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': feed['feedurl'], error:true });
+                    this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': feed['feedurl'].substring(0,40), error:true });
                     this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': '..' });
                     this.counter += 1;
                 })
