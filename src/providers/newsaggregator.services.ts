@@ -168,7 +168,7 @@ export class NewsAggregatorService {
             return txt.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
         }
 
-      //  console.log('FEEDS', feeds);
+        //  console.log('FEEDS', feeds);
 
         // counters for progress indicator
         this.counter = 0;
@@ -181,66 +181,70 @@ export class NewsAggregatorService {
         feeds.map(feed => {
 
             //let item = Observable.from(this.http.get(feed['feedurl'], {}, {}))  // for native HTTP
-            let item = this.http.get(feed['feedurl'])
-           //     .do(() => console.log('LOADING ', feed['feedurl']))
-                .catch((error: any) => {
-                    this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': error.toString() + ' ' + feed['feedurl'], 'error': true });
-                    this.counter += 1;
-                    return Observable.throw(error.json().error || 'Server error')
-                })
-                .filter(input => { return (input.ok && (input.status == 200)) })
-                .map(rawinput => {
-                    let itemlist;
-                    try {
-                        let newsinput = XML.parse(rawinput.text());
-                        itemlist = responsefilterfunctions[feed['responsefilter']](newsinput);
-                    }
-                    catch (err) {
-                        // there is an error in the XML parse, pass an empty feed
-                        itemlist = []
-                    }
-                    //          console.log('1', itemlist, typeof itemlist, Array.isArray(itemlist), itemlist.length);
-                    return itemlist;
-                })
-                .do(() => {
-                    this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': feed['feedurl'].substring(0,25), error:true });
-                    this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': '..' });
-                    this.counter += 1;
-                })
-                // .do(item => { console.log('3', item) })
-                .mergeAll()
-                // .do(item => { console.log('4', item) })
-                .map(item => {
-                    //   console.log('2', item)
+            let item =
+                this.http.get(feed['feedurl'])
 
-                    // we are going to clean some words
-                    let cleanWords = feed['clearWords'];
-                    if (Array.isArray(cleanWords))
-                        cleanWords.map(word => {
-                            while (item['title'].indexOf(word) > -1)
-                                item['title'] = item['title'].replace(word, '');
-                        });
+                    .timeout(5000)
+                    .do(() => {
+                        this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': feed['prettylabel'], error: true });
+                        this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': '..' });
+                        this.counter += 1;
+                    })
+                    .catch((error: any) => {
+                        this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': error.toString() + ' ' + feed['feedurl'], 'error': true });
+                        this.counter += 1;
+                        return Observable.throw(error.json().error || 'Server error')
+                    })
+                    .filter(input => { return (input.ok && (input.status == 200)) })
+                    .map(rawinput => {
+                        let itemlist;
+                        try {
+                            let newsinput = XML.parse(rawinput.text());
+                            itemlist = responsefilterfunctions[feed['responsefilter']](newsinput);
+                        }
+                        catch (err) {
+                            // there is an error in the XML parse, pass an empty feed
+                            itemlist = []
+                        }
+                        //          console.log('1', itemlist, typeof itemlist, Array.isArray(itemlist), itemlist.length);
+                        return itemlist;
+                    })
 
-                    // add some data
-                    item['defaultthumb'] = feed['defaultthumb'];
-                    item['prettylabel'] = feed['prettylabel'];
-                    item['feedlabel'] = feed['feedlabel'];
-                    item['hashcode'] = hashCode(item['title']);
-                    item['itemfilter'] = feed['itemfilter'];
+                    // .do(item => { console.log('3', item) })
+                    .mergeAll()
+                    // .do(item => { console.log('4', item) })
+                    .map(item => {
+                        //   console.log('2', item)
 
-                    return item;//Object.assign({}, item);
-                })
-                // .do(item => { console.log('5', item, item['itemfilter']) })
-                .flatMap(item => itemfilterfunctions[item['itemfilter']](item))
-                //   .do(item => { console.log('6', item) })
-                .onErrorResumeNext()
+                        // we are going to clean some words
+                        let cleanWords = feed['clearWords'];
+                        if (Array.isArray(cleanWords))
+                            cleanWords.map(word => {
+                                while (item['title'].indexOf(word) > -1)
+                                    item['title'] = item['title'].replace(word, '');
+                            });
+
+                        // add some data
+                        item['defaultthumb'] = feed['defaultthumb'];
+                        item['prettylabel'] = feed['prettylabel'];
+                        item['feedlabel'] = feed['feedlabel'];
+                        item['hashcode'] = hashCode(item['title']);
+                        item['itemfilter'] = feed['itemfilter'];
+
+                        return item;//Object.assign({}, item);
+                    })
+                    // .do(item => { console.log('5', item, item['itemfilter']) })
+                    .flatMap(item => itemfilterfunctions[item['itemfilter']](item))
+                    //   .do(item => { console.log('6', item) })
+                    .onErrorResumeNext()
+            //            );
 
             // add the feed observable to the array
             feedsArray.push(item);
         });
 
 
-     //   console.log('FEEDS2', feedsArray);
+        console.log('FEEDS2', feedsArray);
         // and we are going to return an Observable that iterates through all the observables in the array once subscribed to 
         return Observable.from(feedsArray)
             //  .map((value) => { return Observable.from(value).delay(750); })// every x ms through the feeds 
