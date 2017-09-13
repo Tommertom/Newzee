@@ -245,7 +245,7 @@ export class HomePage {
     // register the user action 
     this.lastUserAction = Date.now();
 
-    this.debuginfo="";
+    this.debuginfo = "";
 
     // close the fab
     if ((fab !== null) && (typeof fab !== 'undefined')) fab.close();
@@ -398,13 +398,20 @@ export class HomePage {
           let additem = true;
           let hashcode = item['hashcode'];
 
+          let it = -612645235
+          if (hashcode == it) {
+            console.log('iTEM', item, this.loadedItems
+              .concat(this.bufferedItems).indexOf(it));
+          }
+
           // is the item already in the database? e.g. seen??
           if (this.seenItems.indexOf(hashcode) > -1) additem = false;
 
           // have we loaded it in this session already (in view or already in buffer)
+          // possible issue here
           if (this.loadedItems
             .concat(this.bufferedItems)
-            .find(item => item['hashcode'] === hashcode)) additem = false;
+            .find(item => item['hashcode'] == hashcode)) additem = false;
 
           // check the date
           if ((Date.now() - item['pubTime']) > (this.appSettings['maxAge'] * 24 * 60 * 60 * 1000))
@@ -417,7 +424,11 @@ export class HomePage {
         //  .do(item => { console.log('DEBUG2', item) })
         .subscribe(
         (newitems) => {
+
+
+          // and set the buffer
           this.bufferedItems = newitems;
+
           //  this.updateView();
         },
         (item) => {
@@ -449,9 +460,25 @@ export class HomePage {
 
   updateView() {
     // concat all items 
-    //  console.log('updateView', this.loadedItems, this.bufferedItems)
+    console.log('updateView', this.loadedItems, this.bufferedItems)
     this.loadedItems = this.loadedItems.concat(this.bufferedItems)
-    // console.log('updateView2', this.loadedItems, this.bufferedItems)
+    //console.log('updateView2', this.loadedItems, this.bufferedItems)
+
+    // crude fix of double entries
+    let data = {};
+    this.loadedItems.map(item => {
+      data[item['hashcode']] = item;
+    })
+
+    console.log('DATA', data);
+
+    this.loadedItems = [];
+    Object.keys(data).map(hashcode => {
+      this.loadedItems.push(data[hashcode]);
+    })
+
+    console.log('DATA b', this.loadedItems);
+
 
     this.loadedItems.sort((a, b) => {
       if (a['pubTime'] > b['pubTime']) {
@@ -499,8 +526,8 @@ export class HomePage {
 
     // clear seen items but make sure not too many are stored
     this.debuglog('SEEN ITEM COUNT ' + this.seenItems.length);
-    if (this.seenItems.length > 3000) {
-      this.seenItems = this.seenItems.slice(-1500);
+    if (this.seenItems.length > 5000) {
+      this.seenItems = this.seenItems.slice(-2500);
       this.debuglog('CUTTING' + this.seenItems.length);
     }
 
@@ -510,27 +537,27 @@ export class HomePage {
     // save the custom feeds
     this.db.setkey('customFeeds', this.customFeeds)
       .then(re => {// this.debuglog('Setting cf')
-     });
+      });
 
     // hall of fame
     this.db.setkey('hallOfFame', this.hallOfFame)
       .then(re => { // this.debuglog('Setting hf'); 
-    
-  });
+
+      });
 
     // app settings
     this.db.setkey('appSettings', this.appSettings)
       .then(re => { // this.debuglog('Setting as'); 
-     });
+      });
 
     // statistics
     this.db.setkey('feedStatistics', {})//this.feedStatistics)
       .then(re => { //this.debuglog('Setting fs'); 
-    });
+      });
 
     this.db.setkey('selectedFeeds', this.selectedFeeds)
       .then(re => { //this.debuglog('Setting sf'); 
-    });
+      });
   }
 
   loadSettingsAndData() {
@@ -586,7 +613,7 @@ export class HomePage {
     this.db.getkey('seenItems').then(
       (val) => {
         if (val != null) {
-          this.seenItems = val;
+          this.seenItems = [];// val;
           this.debuglog('SEEN ITEMS COUNT :' + this.seenItems.length.toString());
         }
       })

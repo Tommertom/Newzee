@@ -228,7 +228,7 @@ export class NewsAggregatorService {
                         item['defaultthumb'] = feed['defaultthumb'];
                         item['prettylabel'] = feed['prettylabel'];
                         item['feedlabel'] = feed['feedlabel'];
-                        item['hashcode'] = hashCode(item['title']);
+                        item['hashcode'] = hashCode(item['title'].replace(/ /g,''));
                         item['itemfilter'] = feed['itemfilter'];
 
                         return item;//Object.assign({}, item);

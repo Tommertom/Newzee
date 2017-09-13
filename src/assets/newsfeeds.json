@@ -216,6 +216,20 @@
     "itemfilter": "standard",
     "defaultthumb": "assets/img/newzee.png"
   },
+
+  
+
+  {
+    "feedlabel": "Twitter GTNews",
+    "prettylabel": "Twitter GTNews",
+    "feedurl": "https://queryfeed.net/tw?q=%40gtnewsdotcom",
+    "tags": "twitter",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
+  
   {
     "feedlabel": "Twitter UNCDFMM4P",
     "prettylabel": "Twitter UNCDFMM4P",
@@ -228,7 +242,7 @@
   },
   {
     "feedlabel": "Twitter FSD Uganda",
-    "prettylabel": "Twitter FDS Uganda",
+    "prettylabel": "Twitter FSD Uganda",
     "feedurl": "https://queryfeed.net/tw?q=%40FSDUganda",
     "tags": "twitter",
     "clearWords": [],
@@ -239,7 +253,7 @@
 
   {
     "feedlabel": "Twitter FSD Zambia",
-    "prettylabel": "Twitter FDS Zambia",
+    "prettylabel": "Twitter FSD Zambia",
     "feedurl": "https://queryfeed.net/tw?q=%40FSDZambia",
     "tags": "twitter",
     "clearWords": [],

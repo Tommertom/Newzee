@@ -7,6 +7,9 @@
   </div>
 </ion-header>
 <ion-content #myElement no-bounce padding style="margin:0px;padding:0px">
+
+
+
   <ion-fab left bottom *ngIf="itemCount > 0">
     <button icon-only style="background-color:transparent" ion-fab (click)="stepScrollUp()"> 
          <ion-icon style="font-weight: 900;color:black" name="arrow-up"></ion-icon>
@@ -27,11 +30,21 @@
          <ion-icon style="font-weight: 900;color:black"  name="arrow-down"></ion-icon>
     </button>
   </ion-fab>
-  <ion-list no-lines>
+  
+  
+  <ion-card *ngIf="itemCount == 0">
+    <ion-card-header>Loading</ion-card-header>
+    <ion-card-content>
+      <span [innerHTML]="debuginfo"></span>
+    </ion-card-content>
+  </ion-card>
+  
+  
+  <ion-list no-lines *ngIf="itemCount > 0">
     <ion-item-sliding #slider *ngFor="let item of loadedItems">
       <ion-item text-wrap style="padding:0px" (click)="clickEvent(item,$event)">
         <ion-thumbnail item-left style="margin-top:0px;margin-bottom:0px">
-          <ion-img *ngIf="item?.thumbnail" [src]="item.thumbnail"></ion-img>
+          <img [src]="item.thumbnail">
           <span *ngIf="item?.favorite" style="color:darkred;position:absolute; top:10px;left:10px;">
               <ion-icon name='heart'></ion-icon>
              </span>
@@ -72,10 +85,5 @@
     <ion-icon *ngIf="!isLoading" style="font-size:1400%;color:black" name="refresh" (click)="doPushRefresh()"></ion-icon>
 </div>
 </span>
-  <ion-card>
-    <ion-card-header>DEBUG</ion-card-header>
-    <ion-card-content>
-      <span [innerHTML]="debuginfo"></span>
-    </ion-card-content>
-  </ion-card>
+  
 </ion-content>
