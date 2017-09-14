@@ -397,8 +397,9 @@ export class HomePage {
           // we are going to add this item, unless otherwise is defined below
           let additem = true;
           let hashcode = item['hashcode'];
-          // is the item already in the database? e.g. seen??
-//          if (this.seenItems.indexOf(hashcode) > -1) additem = false;
+
+          // is the item already in seen??
+         if (this.seenItems.indexOf(hashcode) > -1) additem = false;
 
           // have we loaded it in this session already (in view or already in buffer)
           // possible issue here
