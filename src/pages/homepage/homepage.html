@@ -30,16 +30,20 @@
          <ion-icon style="font-weight: 900;color:black"  name="arrow-down"></ion-icon>
     </button>
   </ion-fab>
-  
-  
+
+
   <ion-card *ngIf="itemCount == 0">
-    <ion-card-header>Loading</ion-card-header>
+    <ion-card-header>Console</ion-card-header>
     <ion-card-content>
+      <button ion-button (click)="clearDebug()">Clear</button>
+      <button ion-button (click)="updateStatistics()">Show statistics</button>
+      <br>
+      <pre>{{statisticInfo}}</pre>
       <span [innerHTML]="debuginfo"></span>
     </ion-card-content>
   </ion-card>
-  
-  
+
+
   <ion-list no-lines *ngIf="itemCount > 0">
     <ion-item-sliding #slider *ngFor="let item of loadedItems">
       <ion-item text-wrap style="padding:0px" (click)="clickEvent(item,$event)">
@@ -85,5 +89,5 @@
     <ion-icon *ngIf="!isLoading" style="font-size:1400%;color:black" name="refresh" (click)="doPushRefresh()"></ion-icon>
 </div>
 </span>
-  
+
 </ion-content>

@@ -87,6 +87,10 @@ export class HomePage {
     'sortdate': true
   };
 
+  // statistics
+  feedStatistics: Object = {};
+  statisticInfo: string = "";
+
   // the newsfeed subscribed too
   newsSubscription: any;
 
@@ -156,11 +160,13 @@ export class HomePage {
   toggleFavorite(item, slider) {
     if ((slider !== null) && (typeof slider !== 'undefined')) slider.close();
     item['favorite'] = !item['favorite'];
+    this.addUpStatistic('favorite', item['prettylabel']);
     this.hallOfFame[item['hashcode']] = item;
   }
 
   doSocialShare(item, slider) {
     if ((slider !== null) && (typeof slider !== 'undefined')) slider.close();
+    this.addUpStatistic('socialshare', item['prettylabel']);
     this.socialSharing.share("", item['description'], [], item['link']);
   }
 
@@ -262,7 +268,6 @@ export class HomePage {
         this.itemCount--;
       }
     }
-
     this.updateView();
 
     this.saveSettingsAndData();
@@ -356,6 +361,8 @@ export class HomePage {
     // hack for propagation of press event
     if (Date.now() - this.lastUserAction > this.appSettings['bubbleDelay']) {
 
+      this.addUpStatistic('itemclicks', item['prettylabel']);
+
       // register the user action
       this.lastUserAction = Date.now();
 
@@ -399,13 +406,13 @@ export class HomePage {
           let hashcode = item['hashcode'];
 
           // is the item already in seen??
-         if (this.seenItems.indexOf(hashcode) > -1) additem = false;
+          if (this.seenItems.indexOf(hashcode) > -1) additem = false;
 
           // have we loaded it in this session already (in view or already in buffer)
           // possible issue here
-  //        if (this.loadedItems
-    //        .concat(this.bufferedItems)
-      //      .find(item => item['hashcode'] == hashcode)) additem = false;
+          //        if (this.loadedItems
+          //        .concat(this.bufferedItems)
+          //      .find(item => item['hashcode'] == hashcode)) additem = false;
 
           // check the date
           if ((Date.now() - item['pubTime']) > (this.appSettings['maxAge'] * 24 * 60 * 60 * 1000))
@@ -418,12 +425,11 @@ export class HomePage {
         //  .do(item => { console.log('DEBUG2', item) })
         .subscribe(
         (newitems) => {
-
-
           // and set the buffer
           this.bufferedItems = newitems;
 
-          //  this.updateView();
+          // will create double counts
+          this.processStatistics(newitems);
         },
         (item) => {
           this.events.publish('progress', { 'value': 0, 'total': 1, 'text': '' });
@@ -440,6 +446,31 @@ export class HomePage {
     }
   }
 
+  processStatistics(newItems) {
+    newItems.map(item => {
+      this.addUpStatistic('feedcount', item['prettylabel']);
+    })
+    //    console.log('Statistics ', JSON.stringify(this.feedStatistics, null, 2));
+  }
+
+  updateStatistics() {
+    this.statisticInfo = JSON.stringify(this.feedStatistics, null, 2);
+  }
+
+  clearDebug() {
+    this.debuginfo = "";
+  }
+
+  // will count double entries
+  addUpStatistic(category, label) {
+    if (typeof this.feedStatistics[category] === 'undefined') {
+      this.feedStatistics[category] = {};
+      this.feedStatistics[category][label] = 1;
+    } else if (typeof this.feedStatistics[category][label] === 'undefined') {
+      this.feedStatistics[category][label] = 1;
+    } else this.feedStatistics[category][label] += 1;
+  }
+
   deleteNewsItem(item) {
     if (this.seenItems.indexOf(item['hashcode']) < 0)
       this.seenItems.push(item['hashcode']);
@@ -454,7 +485,7 @@ export class HomePage {
 
   updateView() {
     // concat all items 
-    console.log('updateView', this.loadedItems, this.bufferedItems)
+    //console.log('updateView', this.loadedItems, this.bufferedItems)
     this.loadedItems = this.loadedItems.concat(this.bufferedItems)
     //console.log('updateView2', this.loadedItems, this.bufferedItems)
 
@@ -464,14 +495,14 @@ export class HomePage {
       data[item['hashcode']] = item;
     })
 
-    console.log('DATA', data);
+    //    console.log('DATA', data);
 
     this.loadedItems = [];
     Object.keys(data).map(hashcode => {
       this.loadedItems.push(data[hashcode]);
     })
 
-    console.log('DATA b', this.loadedItems);
+    //  console.log('DATA b', this.loadedItems);
 
 
     this.loadedItems.sort((a, b) => {
@@ -545,7 +576,7 @@ export class HomePage {
       });
 
     // statistics
-    this.db.setkey('feedStatistics', {})//this.feedStatistics)
+    this.db.setkey('feedStatistics', this.feedStatistics)//this.feedStatistics)
       .then(re => { //this.debuglog('Setting fs'); 
       });
 
@@ -618,6 +649,7 @@ export class HomePage {
       (val) => {
         this.debuglog('DEBUG stat type ' + typeof val);
         this.debuglog('DEBUG loaded feedstatistics');
+        this.feedStatistics = val;
       })
       .catch(err => { this.debuglog('ERROR fs' + JSON.stringify(err)) })
 
