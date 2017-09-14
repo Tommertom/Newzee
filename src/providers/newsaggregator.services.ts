@@ -244,7 +244,7 @@ export class NewsAggregatorService {
         });
 
 
-        console.log('FEEDS2', feedsArray);
+        //console.log('FEEDS2', feedsArray);
         // and we are going to return an Observable that iterates through all the observables in the array once subscribed to 
         return Observable.from(feedsArray)
             //  .map((value) => { return Observable.from(value).delay(750); })// every x ms through the feeds 
