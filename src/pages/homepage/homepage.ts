@@ -397,21 +397,14 @@ export class HomePage {
           // we are going to add this item, unless otherwise is defined below
           let additem = true;
           let hashcode = item['hashcode'];
-
-          let it = -612645235
-          if (hashcode == it) {
-            console.log('iTEM', item, this.loadedItems
-              .concat(this.bufferedItems).indexOf(it));
-          }
-
           // is the item already in the database? e.g. seen??
-          if (this.seenItems.indexOf(hashcode) > -1) additem = false;
+//          if (this.seenItems.indexOf(hashcode) > -1) additem = false;
 
           // have we loaded it in this session already (in view or already in buffer)
           // possible issue here
-          if (this.loadedItems
-            .concat(this.bufferedItems)
-            .find(item => item['hashcode'] == hashcode)) additem = false;
+  //        if (this.loadedItems
+    //        .concat(this.bufferedItems)
+      //      .find(item => item['hashcode'] == hashcode)) additem = false;
 
           // check the date
           if ((Date.now() - item['pubTime']) > (this.appSettings['maxAge'] * 24 * 60 * 60 * 1000))
@@ -464,7 +457,7 @@ export class HomePage {
     this.loadedItems = this.loadedItems.concat(this.bufferedItems)
     //console.log('updateView2', this.loadedItems, this.bufferedItems)
 
-    // crude fix of double entries
+    // crude fix of double entries in full feed
     let data = {};
     this.loadedItems.map(item => {
       data[item['hashcode']] = item;
@@ -613,7 +606,7 @@ export class HomePage {
     this.db.getkey('seenItems').then(
       (val) => {
         if (val != null) {
-          this.seenItems = [];// val;
+          this.seenItems = val;
           this.debuglog('SEEN ITEMS COUNT :' + this.seenItems.length.toString());
         }
       })
