@@ -219,6 +219,19 @@
 
   
 
+
+  {
+    "feedlabel": "Twitter Geek.com",
+    "prettylabel": "Twitter Geek.com",
+    "feedurl": "https://queryfeed.net/tw?q=%40geekdotcom",
+    "tags": "twitter",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
+  
+
   {
     "feedlabel": "Twitter GTNews",
     "prettylabel": "Twitter GTNews",

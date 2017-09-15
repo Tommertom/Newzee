@@ -485,8 +485,7 @@ export class HomePage {
       );
     })
 
-    console.log('srot', this.statTable, this.statCategories);
-
+   // console.log('srot', this.statTable, this.statCategories)
   }
 
   clearConsole() {
