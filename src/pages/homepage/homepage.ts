@@ -345,8 +345,7 @@ export class HomePage {
       this.addUpStatistic('deeplink', item['prettylabel']);
 
       // open the site
-      let browser;
-      browser = this.iab.create(item['link'], '_system'); // avoid tslint issue
+      let browser = this.iab.create(item['link'], '_system'); 
       browser.show();
     }
   }
