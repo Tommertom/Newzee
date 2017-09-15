@@ -85,8 +85,19 @@
       <button ion-button (click)="clearConsole()">Clear</button>
       <button ion-button (click)="updateStatistics()">Show statistics</button>
       <br>
-      <pre>{{statisticInfo}}</pre>
       <span [innerHTML]="debuginfo"></span>
+
+      <ion-grid *ngFor="let cat of statCategories">
+      <h1>  {{cat}}</h1>
+        <ion-row *ngFor="let row of statTable[cat]">
+          <ion-col>
+            {{row['label']}}
+          </ion-col>
+          <ion-col>
+            {{row['value']}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-card-content>
   </ion-card>
 

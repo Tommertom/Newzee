@@ -90,6 +90,8 @@ export class HomePage {
   // statistics
   feedStatistics: Object = {};
   statisticInfo: string = "";
+  statTable = [];
+  statCategories = [];
 
   // the newsfeed subscribed too
   newsSubscription: any;
@@ -345,7 +347,7 @@ export class HomePage {
       this.addUpStatistic('deeplink', item['prettylabel']);
 
       // open the site
-      let browser = this.iab.create(item['link'], '_system'); 
+      let browser = this.iab.create(item['link'], '_system');
       browser.show();
     }
   }
@@ -453,13 +455,43 @@ export class HomePage {
     //    console.log('Statistics ', JSON.stringify(this.feedStatistics, null, 2));
   }
 
+
+  /*
+      <ion-grid *ngFor="let cat of statCategories">
+        {{cat}}
+        <ion-row *ngFor="let row of statCategories[cat]">
+          <ion-col>
+            {{row[item]}}
+          </ion-col>
+          <ion-col>
+            {{row[value]}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+  */
+
   updateStatistics() {
     this.statisticInfo = JSON.stringify(this.feedStatistics, null, 2);
+
+    this.statCategories = Object.keys(this.feedStatistics);
+
+    this.statCategories.map(category => {
+      this.statTable[category] = [];
+      Object.keys(this.feedStatistics[category]).map(item => {
+        this.statTable[category].push({ label: item, value: this.feedStatistics[category][item] })
+      })
+      this.statTable[category].sort(
+        function (a, b) { return (a.value < b.value) ? 1 : ((b.value < a.value) ? -1 : 0); }
+      );
+    })
+
+    console.log('srot', this.statTable, this.statCategories);
+
   }
 
   clearConsole() {
     this.debuginfo = "";
-    this.statisticInfo="";
+    this.statisticInfo = "";
   }
 
   // will count double entries
