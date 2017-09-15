@@ -342,6 +342,7 @@ export class HomePage {
 
       // register the user action
       this.lastUserAction = Date.now();
+      this.addUpStatistic('deeplink', item['prettylabel']);
 
       // open the site
       let browser;
@@ -457,8 +458,9 @@ export class HomePage {
     this.statisticInfo = JSON.stringify(this.feedStatistics, null, 2);
   }
 
-  clearDebug() {
+  clearConsole() {
     this.debuginfo = "";
+    this.statisticInfo="";
   }
 
   // will count double entries
