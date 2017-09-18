@@ -385,7 +385,7 @@ export class HomePage {
     // allow for full loading, only if loading is not already in progress
     if (!this.isLoading) {
 
-   //console.log('In refresh', JSON.stringify(this.feedStatistics));
+      //console.log('In refresh', JSON.stringify(this.feedStatistics));
 
       // sanitise feedstatistics
       Object.keys(this.feedStatistics).map(category => {
@@ -440,8 +440,6 @@ export class HomePage {
           // and set the buffer
           this.bufferedItems = newitems;
 
-          // will create double counts
-          this.processStatistics(newitems);
         },
         (item) => {
           this.events.publish('progress', { 'value': 0, 'total': 1, 'text': '' });
@@ -513,6 +511,16 @@ export class HomePage {
     } else this.feedStatistics[category][label] += 1;
   }
 
+
+  setStatistic(category, label, value) {
+    if (typeof this.feedStatistics[category] === 'undefined') {
+      this.feedStatistics[category] = {};
+      this.feedStatistics[category][label] = value;
+    } else if (typeof this.feedStatistics[category][label] === 'undefined') {
+      this.feedStatistics[category][label] = value;
+    } else this.feedStatistics[category][label] = value;
+  }
+
   deleteNewsItem(item) {
     if (this.seenItems.indexOf(item['hashcode']) < 0)
       this.seenItems.push(item['hashcode']);
@@ -527,9 +535,7 @@ export class HomePage {
 
   updateView() {
     // concat all items 
-    //console.log('updateView', this.loadedItems, this.bufferedItems)
     this.loadedItems = this.loadedItems.concat(this.bufferedItems)
-    //console.log('updateView2', this.loadedItems, this.bufferedItems)
 
     // crude fix of double entries in full feed
     let data = {};
@@ -538,15 +544,24 @@ export class HomePage {
     })
 
     //    console.log('DATA', data);
-
     this.loadedItems = [];
     Object.keys(data).map(hashcode => {
       this.loadedItems.push(data[hashcode]);
+
+      // some stuff for statistics last pubtime 
+      let date = data[hashcode]['pubTime'];
+      if (typeof date === 'undefined') date = Date.now();
+      let value = new Date(date);
+      let check = value.getFullYear() * 10000;
+      check += (value.getMonth() + 1) * 100;
+      check += value.getDate();
+      this.setStatistic('lastdate', data[hashcode]['prettylabel'], check);
     })
 
-    //  console.log('DATA b', this.loadedItems);
+    // may create double counts
+    this.processStatistics(this.loadedItems);
 
-
+    // sort the stuff
     this.loadedItems.sort((a, b) => {
       if (a['pubTime'] > b['pubTime']) {
         return -1;

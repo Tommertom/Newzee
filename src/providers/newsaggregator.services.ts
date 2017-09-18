@@ -2,7 +2,21 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import * as XML from 'pixl-xml';
 import { Events } from 'ionic-angular';
-import { Observable } from "rxjs/Rx";
+//import { Observable } from "rxjs/Rx";
+
+
+import {Observable} from 'rxjs/Observable'
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/mergeAll';
+import 'rxjs/add/operator/concatAll';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/operator/timeout';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/onErrorResumeNext';
+import 'rxjs/add/operator/toArray';
 
 const responsefilterfunctions = {
     'standard': (feed) => {

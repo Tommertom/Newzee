@@ -217,8 +217,45 @@
     "defaultthumb": "assets/img/newzee.png"
   },
 
+  {
+    "feedlabel": "Disrupt Africa",
+    "prettylabel": "Disrupt Africa",
+    "feedurl": "http://disrupt-africa.com/feed/",
+    "tags": "fintech",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
+  {
+    "feedlabel": "Technofoliance",
+    "prettylabel": "Technofoliance",
+    "feedurl": "http://techfoliance.com/feed/",
+    "tags": "fintech",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
+
+
+
+  {
+    "feedlabel": "Twitter Cyprus Mail",
+    "prettylabel": "Twitter Cyprus Mail",
+    "feedurl": "https://queryfeed.net/tw?q=%40cyprusmail",
+    "tags": "twitter",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
   
 
+
+ 
+
+  
 
   {
     "feedlabel": "Twitter Geek.com",
