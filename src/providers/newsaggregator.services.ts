@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import * as XML from 'pixl-xml';
 import { Events } from 'ionic-angular';
-//import { Observable } from "rxjs/Rx";
 
 
 import {Observable} from 'rxjs/Observable'

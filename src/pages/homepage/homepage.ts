@@ -388,13 +388,14 @@ export class HomePage {
       //console.log('In refresh', JSON.stringify(this.feedStatistics));
 
       // sanitise feedstatistics
-      Object.keys(this.feedStatistics).map(category => {
-        this.defaultFeeds.concat(this.customFeeds).map(feed => {
-          let label = feed['prettylabel'];
-          if (typeof this.feedStatistics[category][label] === 'undefined')
-            this.feedStatistics[category][label] = 0
+      if (Object.keys(this.feedStatistics).length > 0)
+        Object.keys(this.feedStatistics).map(category => {
+          this.defaultFeeds.concat(this.customFeeds).map(feed => {
+            let label = feed['prettylabel'];
+            if (typeof this.feedStatistics[category][label] === 'undefined')
+              this.feedStatistics[category][label] = 0
+          })
         })
-      })
 
 
       this.isLoading = true;
