@@ -13,8 +13,6 @@ import { IonicStorageModule } from '@ionic/storage';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 
-//import { HTTP } from '@ionic-native/http';
-
 // app pages
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/homepage/homepage';
@@ -48,7 +46,7 @@ export class Ionic2ErrorHandler extends IonicErrorHandler implements ErrorHandle
     BrowserModule, HttpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot({
-      name: 'newzeedb3',
+      name: 'newzeedba',
       driverOrder: ['sqlite', 'indexeddb', 'websql'] //
     })
   ],
