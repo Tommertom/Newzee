@@ -388,7 +388,7 @@ export class HomePage {
       //console.log('In refresh', JSON.stringify(this.feedStatistics));
 
       // sanitise feedstatistics
-      if (Object.keys(this.feedStatistics).length > 0)
+      if (this.feedStatistics !== null)
         Object.keys(this.feedStatistics).map(category => {
           this.defaultFeeds.concat(this.customFeeds).map(feed => {
             let label = feed['prettylabel'];
@@ -481,6 +481,7 @@ export class HomePage {
 
   updateStatistics() {
     this.statisticInfo = JSON.stringify(this.feedStatistics, null, 2);
+
 
     this.statCategories = Object.keys(this.feedStatistics);
 
