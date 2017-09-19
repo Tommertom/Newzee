@@ -46,7 +46,7 @@ export class Ionic2ErrorHandler extends IonicErrorHandler implements ErrorHandle
     BrowserModule, HttpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot({
-      name: 'newzeedba',
+      name: 'newzeedb3',
       driverOrder: ['sqlite', 'indexeddb', 'websql'] //
     })
   ],

@@ -388,14 +388,14 @@ export class HomePage {
       //console.log('In refresh', JSON.stringify(this.feedStatistics));
 
       // sanitise feedstatistics
-      if (this.feedStatistics !== null)
-        Object.keys(this.feedStatistics).map(category => {
-          this.defaultFeeds.concat(this.customFeeds).map(feed => {
-            let label = feed['prettylabel'];
-            if (typeof this.feedStatistics[category][label] === 'undefined')
-              this.feedStatistics[category][label] = 0
-          })
+      // if (this.feedStatistics !== null)
+      Object.keys(this.feedStatistics).map(category => {
+        this.defaultFeeds.concat(this.customFeeds).map(feed => {
+          let label = feed['prettylabel'];
+          if (typeof this.feedStatistics[category][label] === 'undefined')
+            this.feedStatistics[category][label] = 0
         })
+      })
 
 
       this.isLoading = true;
@@ -706,9 +706,11 @@ export class HomePage {
     // load the statistics
     this.db.getkey('feedStatistics').then(
       (val) => {
-        this.debuglog('DEBUG stat type ' + typeof val);
-        this.debuglog('DEBUG loaded feedstatistics');
-        this.feedStatistics = val;
+        if (val != null) {
+          this.debuglog('DEBUG stat type ' + typeof val);
+          this.debuglog('DEBUG loaded feedstatistics');
+          this.feedStatistics = val;
+        }
       })
       .catch(err => { this.debuglog('ERROR fs' + JSON.stringify(err)) })
 
