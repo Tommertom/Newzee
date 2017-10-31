@@ -38,6 +38,19 @@
     "itemfilter": "standard",
     "defaultthumb": "assets/img/newzee.png"
   },
+
+ {
+    "feedlabel": "HowWeMadeItInAfrica",
+    "prettylabel": "How We Made It In Africa",
+    "feedurl": "http://feeds.feedburner.com/HowWeMadeItInAfrica?format=xml",
+    "tags": "tech africa",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
+
+  
   {
     "feedlabel": "CoinTelegraph",
     "prettylabel": "Coin Telegraph",
@@ -251,7 +264,17 @@
     "defaultthumb": "assets/img/newzee.png"
   },
   
-
+  {
+    "feedlabel": "Twitter PKawumi",
+    "prettylabel": "Twitter PKawumi",
+    "feedurl": "https://queryfeed.net/tw?q=%40pkawumi",
+    "tags": "twitter",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
+  
 
  
 

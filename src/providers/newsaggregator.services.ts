@@ -4,7 +4,7 @@ import * as XML from 'pixl-xml';
 import { Events } from 'ionic-angular';
 
 
-import {Observable} from 'rxjs/Observable'
+import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/mergeAll';
@@ -195,7 +195,7 @@ export class NewsAggregatorService {
 
             //let item = Observable.from(this.http.get(feed['feedurl'], {}, {}))  // for native HTTP
             let item =
-                this.http.get(feed['feedurl'])
+                this.http.get('https://cors-anywhere.herokuapp.com/' + feed['feedurl'])
 
                     .timeout(5000)
                     .do(() => {
@@ -204,10 +204,19 @@ export class NewsAggregatorService {
                         this.counter += 1;
                     })
                     .catch((error: any) => {
+
+                        console.log('Error in feed', error, feed['feedurl'], 'retry cors')
+
+                        //   return this.http.get('https://cors-anywhere.herokuapp.com/' + feed['feedurl'])
+                        //     .catch((error: any) => {
                         this.events.publish('progress', { 'value': this.counter, 'total': this.totalcount - 1, 'text': error.toString() + ' ' + feed['feedurl'], 'error': true });
                         this.counter += 1;
                         return Observable.throw(error.json().error || 'Server error')
+                        //   })
+
+
                     })
+
                     .filter(input => { return (input.ok && (input.status == 200)) })
                     .map(rawinput => {
                         let itemlist;
@@ -241,7 +250,7 @@ export class NewsAggregatorService {
                         item['defaultthumb'] = feed['defaultthumb'];
                         item['prettylabel'] = feed['prettylabel'];
                         item['feedlabel'] = feed['feedlabel'];
-                        item['hashcode'] = hashCode(item['title'].replace(/ /g,''));
+                        item['hashcode'] = hashCode(item['title'].replace(/ /g, ''));
                         item['itemfilter'] = feed['itemfilter'];
 
                         return item;//Object.assign({}, item);
