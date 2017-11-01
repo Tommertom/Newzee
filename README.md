@@ -1,4 +1,4 @@
-# .Newzee smart and easy Newsreader
+# .Newzee  easy Newsreader
 .Newzee is a simple and smart newsreader which takes feeds from popular sources
 and allows the user to swiftly browse through the newsitems.
 
@@ -8,17 +8,13 @@ Some of the features are:
 * direct deeplinking - if you press and hold an item, you will directly go to the article on the web
 * many newsservices which you can easily select and unselect
 * social sharing of news
-
+* no issues on cors.
 
 ## Todo
-* more feeds, more feeds, more feeds... but only good ones 
-* statistics 
 * work on the HTTP headers for optimisation
 
 Some known issues:
 * code cleaning and sanitise for security (injecting of code)
-* feed selector runs very slow
-* lazy loading images a bit flawed (ionic issue?)
 
 ## Future...
 * Hall of Fame sharing on website (Firebase experiment)
@@ -32,16 +28,10 @@ Some known issues:
 * Clone this repository: `git clone https://github.com/Tommertom/Newzee.git`.
 * Run `npm install` from the project root.
 * Install the ionic CLI, Cordova (`npm install -g ionic@latest cordova@latest`)
-* Run `ionic serve` to have the project compiled for the first time 
+* Run `ionic serve -w chrome` to emulate in a browser
 
-Needs cordova plugins (after full install and compile):
-* `ionic cordova plugin add --save cordova-plugin-inappbrowser` 
-* `ionic cordova plugin add --save cordova-plugin-x-socialsharing`
-* `ionic cordova plugin add --save cordova-sqlite-storage `
-
-This demo is available in Ionic View (similar to Apple's Testflight) under app ID `365fdabe`. Download Ionic View (legacy version) in your app store (android/iOS), register free 
-Ionic account (https://apps.ionic.io/signup) and enjoy. Assure you do a `Clear App Data` in Ionic View
-if you want to enjoy the latest committed version.  NOTE: some of the feeds are not working in `ionic serve` due to CORS restrictions
+This demo is available in Ionic View Pro (similar to Apple's Testflight) under app ID `2b25095e`. 
+Download Ionic View (legacy version) in your app store (android/iOS)
 
 ## Important!
 Use at own discretion, but if you have any suggestion, let me know or do a PR. 

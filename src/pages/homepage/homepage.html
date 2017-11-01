@@ -31,6 +31,18 @@
     </button>
   </ion-fab>
 
+
+  <div #gridPackery class="grid">
+    <ion-card *ngFor="let item of loadedItems" class="grid-item" style="width:250px;height:250px" (click)="clickEvent(item, null)">
+      <img [src]="item.thumbnail" style="width:250px;height:180px">
+      <br>
+      <b style="font-size:110%" [innerHTML]="item?.title"></b>
+    </ion-card>
+  </div>
+
+
+
+<ng-container *ngIf="itemCount<0">
   <ion-list no-lines *ngIf="itemCount > 0">
     <ion-item-sliding #slider *ngFor="let item of loadedItems">
       <ion-item text-wrap style="padding:0px" (click)="clickEvent(item,$event)">
@@ -70,6 +82,8 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
+
+</ng-container>
   <span *ngIf="itemCount == 0">
     <br><br><br>
     <div text-center>
@@ -88,7 +102,7 @@
       <span [innerHTML]="debuginfo"></span>
 
       <ion-grid *ngFor="let cat of statCategories">
-      <h1>  {{cat}}</h1>
+        <h1> {{cat}}</h1>
         <ion-row *ngFor="let row of statTable[cat]">
           <ion-col>
             {{row['label']}}
