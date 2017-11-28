@@ -103,6 +103,8 @@ export class HomePage {
   isLoading: boolean = false;
   progressPercentage: string = "0%";
 
+  showTiles: boolean = true;
+
   // needed for the scrollToTop and monitoring the scrolling progress (lazy loading image)
   @ViewChild(Content) content: Content;
 
@@ -125,6 +127,9 @@ export class HomePage {
   ) { }
 
 
+  //  height()
+  // platform.ready  en dan hoogte
+
   debuglog(s) {
     this.debuginfo = this.debuginfo + '<br>' + s;
   }
@@ -134,43 +139,77 @@ export class HomePage {
    * 
    */
   ionViewWillEnter() {
+
+    console.log('platforms', this.platform.platforms(), this.platform.height());
+
+    //1447 desktop
+    // 768 tablet
+
+    this.platform.ready()
+      .then(_ => {
+        this.showTiles = this.platform.is('tablet') || this.platform.is('core')
+      })
+
     this.lastUserAction = 0;
     setTimeout(() => {
       this.platform.ready().then(() => {
         this.db.initDB().then(() => {
           this.loadSettingsAndData();
-
           setTimeout(() => { this.doRefresh(); }, 1800);
-
         });
       });
     }, 500);
   }
 
 
-  showActionSheet() {
+
+
+  showActionSheet(item) {
+
+    //    console.log('ACTION sheet item', item)
 
     this.actionSheetCtrl.create({
-      title: 'Modify your album',
+      title: 'Delete item',
       buttons: [
+
         {
-          text: 'Destructive',
+          text: 'Open item',
+          handler: () => {
+            this.pressEvent(item, null);
+          }
+        },
+
+        {
+          text: 'Delete item',
           role: 'destructive',
           handler: () => {
-            console.log('Destructive clicked');
+            this.deleteItem(item, null);
           }
         },
         {
-          text: 'Archive',
+          text: 'Delete feed ' + item['prettylabel'],
+          role: 'destructive',
           handler: () => {
-            console.log('Archive clicked');
+            this.deleteFeed(item, null);
           }
         },
+        {
+          text: 'Share ... ',
+          handler: () => {
+            this.doSocialShare(item, null)
+          }
+        },
+        {
+          text: 'Toggle favorite',
+          handler: () => {
+            this.toggleFavorite(item, null);
+          }
+        },
+
         {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         }
       ]
@@ -215,6 +254,7 @@ export class HomePage {
     if ((slider !== null) && (typeof slider !== 'undefined')) slider.close();
     this.deleteNewsItem(item);
   }
+
 
   deleteFeed(item, slider) {
     if ((slider !== null) && (typeof slider !== 'undefined')) slider.close();
@@ -630,17 +670,18 @@ export class HomePage {
 
     this.scrollToTop();
 
-    setTimeout(() => {
-      console.log('PACKERY ', this.gridPackery.nativeElement)
+    if (this.showTiles)
+      setTimeout(() => {
+        console.log('PACKERY ', this.gridPackery.nativeElement)
 
-      this.pckry = new Packery(this.gridPackery.nativeElement, {
-        itemSelector: ".grid-item",
-        gutter: 0,
-        columnWidth: 0,
-        initLayout: true
-      });
+        this.pckry = new Packery(this.gridPackery.nativeElement, {
+          itemSelector: ".grid-item",
+          gutter: 10,
+          columnWidth: 0,
+          initLayout: true
+        });
 
-    }, 500)
+      }, 500)
   }
 
   /** 
@@ -755,6 +796,7 @@ export class HomePage {
       (val) => {
         if (val != null) {
           this.seenItems = val;
+          //this.seenItems = [];
           this.debuglog('SEEN ITEMS COUNT :' + this.seenItems.length.toString());
         }
       })

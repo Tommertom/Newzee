@@ -195,7 +195,8 @@ export class NewsAggregatorService {
 
             //let item = Observable.from(this.http.get(feed['feedurl'], {}, {}))  // for native HTTP
             let item =
-                this.http.get('https://cors-anywhere.herokuapp.com/' + feed['feedurl'])
+            // CORS hack 'https://cors-anywhere.herokuapp.com/' +
+                this.http.get( feed['feedurl'])
 
                     .timeout(5000)
                     .do(() => {
