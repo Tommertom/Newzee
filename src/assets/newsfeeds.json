@@ -251,8 +251,16 @@
     "defaultthumb": "assets/img/newzee.png"
   },
 
-
-
+  {
+    "feedlabel": "BankNXT",
+    "prettylabel": "BankNXT",
+    "feedurl": "http://feeds.feedburner.com/banknxt",
+    "tags": "fintech",
+    "clearWords": [],
+    "responsefilter": "standard",
+    "itemfilter": "standard",
+    "defaultthumb": "assets/img/newzee.png"
+  },
   {
     "feedlabel": "Twitter Cyprus Mail",
     "prettylabel": "Twitter Cyprus Mail",

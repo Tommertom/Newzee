@@ -21,18 +21,6 @@ import { NewsAggregatorService } from './../../providers/newsaggregator.services
 import { Db } from './../../providers/db';
 
 import * as Packery from 'packery';
-/*
-
-  <ion-refresher (ionRefresh)="doPullRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-
-
-  <ion-list no-lines [virtualScroll]="loadedItems" [bufferRatio]="10" [approxItemHeight]="'55px'">
-    <ion-item-sliding #slider *virtualItem="let item">
-  
-
-*/
 
 /**
  * Component HomePage 
@@ -68,8 +56,6 @@ export class HomePage {
   seenItems: Array<string> = [];
   itemCount: number = 0;
   hallOfFame: Object = {};
-
-
 
   // collections of feeds available and selected
   selectedFeeds: Object = { 'NewZeeTutorial': true }; // set the tutorial as default to true
@@ -340,8 +326,7 @@ export class HomePage {
     for (var i = this.loadedItems.length - 1; i >= 0; i--) {
 
       // only delete items which are not marked favorite
-      //      if (!this.loadedItems[i]['favorite']) {
-      {
+      if (!this.loadedItems[i]['favorite']) {
         if (this.seenItems.indexOf(this.loadedItems[i]['hashcode']) < 0)
           this.seenItems.push(this.loadedItems[i]['hashcode']);
 
